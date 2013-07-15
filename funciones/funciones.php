@@ -2,15 +2,15 @@
 
 //
 $metodo = $_POST['funcion'];
-if ($metodo == "cargarGeneros"||$metodo == "cargarPorGenero") {
+if ($metodo == "cargarGeneros" || $metodo == "cargarPorGenero") {
     $genero = $_POST['genero'];
     $metodo($genero);
 } else {
     $metodo();
 }
 
-function getCantidadPartituras(){
-  include 'conectar.php';
+function getCantidadPartituras() {
+    include 'conectar.php';
     $sqlConsultar = "SELECT COUNT( id ) AS Cantidad FROM partituras_subidas";
     $result = mysql_query($sqlConsultar, $conexion);
     $Cantidad = "";
@@ -20,7 +20,7 @@ function getCantidadPartituras(){
     $arr[0] = array(
         'Cantidad' => $Cantidad,);
     echo '' . json_encode($arr) . '';
-    include 'desconectar.php'; 
+    include 'desconectar.php';
 }
 
 function cargarRecientes() {
@@ -40,7 +40,6 @@ function cargarRecientes() {
     echo '' . json_encode($arr) . '';
 }
 
-
 function cargarGeneros($genero) {
     include 'conectar.php';
     $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  '$genero' ORDER BY id DESC LIMIT 10";
@@ -58,25 +57,27 @@ function cargarGeneros($genero) {
     echo '' . json_encode($arr) . '';
 }
 
-function cargarPorGenero($genero){
- include 'conectar.php';
- $limite = $_POST['limite'];
- $filtro = $_POST['filtro'];
- $fil='';
- $fil = 'ASC';
- if($filtro=='fecha'||$filtro=='puntos_positivos'||$filtro=='puntos_negativos')
- $fil="DESC";    
-    
+function cargarPorGenero($genero) {
+    include 'conectar.php';
+    $limite = $_POST['limite'];
+    $filtro = $_POST['filtro'];
+    $fil = '';
+    $fil = 'ASC';
+    if ($filtro == 'fecha_publicacion' || $filtro == 'puntos_positivos' || $filtro == 'puntos_negativos' || $filtro == 'contador_descargas')
+        $fil = "DESC";
+
     $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =   '$genero' ORDER BY $filtro $fil  LIMIT $limite, 5";
     $result = mysql_query($sqlConsultar, $conexion);
     $contador = 0;
     while ($row = @mysql_fetch_array($result)) {
         $arr[$contador] = array('Titulo' => $row['titulo'],
-                    'Autor' => $row['autor'],
-                    'Id' => $row['id'],
-                    'Link' => $row['link_descarga'],
-                    'Fecha' => $row['fecha_publicacion'],
-                    'Contador' => $row['contador_descargas']);
+            'Autor' => $row['autor'],
+            'Id' => $row['id'],
+            'Link' => $row['link_descarga'],
+            'Fecha' => $row['fecha_publicacion'],
+            'PuntosPositivos' => $row['puntos_positivos'],
+            'PuntosNegativos' => $row['puntos_negativos'],
+            'Contador' => $row['contador_descargas']);
         $contador++;
         $id = $row['id'];
         $genero = $row['genero'];
@@ -88,23 +89,22 @@ function cargarPorGenero($genero){
     }
     include 'desconectar.php';
     array_push($arr);
-    echo '' . json_encode($arr) . '';   
-} 
-
-function contadorPartiturasPorGenero() {
- include 'conectar.php';
-  $genero = $_POST['genero'];
- $sqlConsultar = "SELECT count(id) Contador FROM partituras_subidas WHERE genero = '$genero' ORDER BY autor ASC";
- $result = mysql_query($sqlConsultar, $conexion);
- $total;
- while ($row = @mysql_fetch_array($result)) {
-        $total = $row['Contador'];
-    }
- $totalPaginas = ceil($total/5);   
- echo $totalPaginas."%".$total;
- include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
 }
 
+function contadorPartiturasPorGenero() {
+    include 'conectar.php';
+    $genero = $_POST['genero'];
+    $sqlConsultar = "SELECT count(id) Contador FROM partituras_subidas WHERE genero = '$genero' ORDER BY autor ASC";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $total;
+    while ($row = @mysql_fetch_array($result)) {
+        $total = $row['Contador'];
+    }
+    $totalPaginas = ceil($total / 5);
+    echo $totalPaginas . "%" . $total;
+    include 'desconectar.php';
+}
 
 function cargarTodasSalsa() {
     include 'conectar.php';
@@ -674,18 +674,18 @@ function recuperarDatos() {
     if ($total == 1) {
         $sqlConsultar = "SELECT user, pass FROM tbl_users WHERE email='$email'";
         $result = mysql_query($sqlConsultar, $conexion);
-        $usuario="";
-        $contraseña="";
+        $usuario = "";
+        $contraseña = "";
         while ($row = @mysql_fetch_array($result)) {
-            $usuario= $row['user'];
-            $contraseña=$row['pass'];
+            $usuario = $row['user'];
+            $contraseña = $row['pass'];
         }
         $destinatario = $_POST['email_recovery'];
         $asunto = "Datos de Ingreso Partiruas Musicales";
         $mensaje = "---------------------------------- \n";
         $mensaje.= "Has solicitado el reenvio de tus datos de Ingreso a Partituras Musicales\n\n";
-        $mensaje.= "Usuario:           ".$usuario."\n";
-        $mensaje.= "Contraseña:        ".$contraseña."\n";
+        $mensaje.= "Usuario:           " . $usuario . "\n";
+        $mensaje.= "Contraseña:        " . $contraseña . "\n";
         $mensaje.= "---------------------------------- \n";
         $mensaje.= "Enviado desde http://www.partiturasmusicales.capnix.com \n\n\n";
         $headers = "MIME-Version: 1.0\r\n";
@@ -694,7 +694,7 @@ function recuperarDatos() {
         $headers = "From: " . $correoOrigen . "\r\n";
         $correoDestino = 'eaar23@gmail.com';
         $headers .= "Cc: " . $correoDestino . "\r\n";
-        mail($destinatario, $asunto, $mensaje, $headers);       
+        mail($destinatario, $asunto, $mensaje, $headers);
         $arr[0] = array('estado' => '1');
         echo '' . json_encode($arr) . '';
     } else {

@@ -107,7 +107,7 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
 
                 <div id="contenedorPartituras" class="row" style="margin-top: -92px;"> 
                     
-                    <div class="btn-group span10">
+<!--                    <div class="btn-group span10">
                             <button class="btn btn-mini">Filtrar por:</button>
                             <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                             <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
@@ -115,10 +115,43 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
                                 <li><a class="afiltro" valor="titulo">Orden Alfabetico (Titulo)</a></li>
                                 <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
                                 <li><a class="afiltro" valor="contador_descargas">Numero de Descargas</a></li>
-                                <li><a class="afiltro" valor="puntos_positivos">Puntos Negativos</a></li>
-                                <li><a class="afiltro" valor="puntos_negativos">Puntos Positivos</a></li>
+                                <li><a class="afiltro" valor="puntos_positivos">Puntos Positivos</a></li>
+                                <li><a class="afiltro" valor="puntos_negativos">Puntos Negativos</a></li>                                
                             </ul>
                     </div>
+                   -->
+                    
+                        <div class="btn-group span5">
+                                <button class="btn btn-mini">Filtrar por:</button>
+                                <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                                <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
+                                    <li><a class="afiltro" valor="autor">Orden Alfabetico (Artista)</a></li>
+                                    <li><a class="afiltro" valor="titulo">Orden Alfabetico (Titulo)</a></li>
+                                    <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
+                                    <li><a class="afiltro" valor="contador_descargas">Numero de Descargas</a></li>
+                                    <li><a class="afiltro" valor="puntos_positivos">Puntos Positivos</a></li>
+                                    <li><a class="afiltro" valor="puntos_negativos">Puntos Negativos</a></li>                                
+                                </ul>
+                        </div>
+                  
+                    <div class="input-append">
+                        <input class="input-medium" id="appendedDropdownButton" type="text" style="height: 12px;">
+                        <div class="btn-group">
+                            <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+                                Buscar por:
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
+                             <li><a class="afiltro" valor="autor">Orden Alfabetico (Artista)</a></li>
+                            <li><a class="afiltro" valor="titulo">Orden Alfabetico (Titulo)</a></li>
+                            <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
+                            <li><a class="afiltro" valor="contador_descargas">Numero de Descargas</a></li>
+                            <li><a class="afiltro" valor="puntos_positivos">Puntos Positivos</a></li>
+                            <li><a class="afiltro" valor="puntos_negativos">Puntos Negativos</a></li>    
+                            </ul>
+                        </div>
+                    </div>
+                    
                     <br><br>
                     <div id="contenedorPartiturasCargadas">
 

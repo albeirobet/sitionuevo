@@ -142,6 +142,8 @@ function cargarPorGenero(Limite) {
                 var contadorDescargas = item.Contador;
                 var fechaVector = item.Fecha;
                 var fechaPublicacion = fechaVector.split(' ');
+                var puntos_positivos = item.PuntosPositivos;
+                var puntos_negativos = item.PuntosNegativos;
                 fechaPublicacion = fechaPublicacion[0];
                 //console.log(id+" "+link+" "+titulo+" "+autor);
 
@@ -162,8 +164,8 @@ function cargarPorGenero(Limite) {
                         " <div class='span2'>" +
                         "<h5 class='media-heading' style='margin-left: 40px;'>Estad&iacute;sticas</h5>" +
                         "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>" + contadorDescargas + "</strong><i class='icon-tasks'></i> Descargas<br>" +
-                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>123</strong><i class='icon-thumbs-up'></i> Positivos<br>" +
-                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>123</strong><i class='icon-thumbs-down'></i>  Negativos" +
+                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>"+puntos_positivos+"</strong><i class='icon-thumbs-up'></i> Positivos<br>" +
+                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>"+puntos_negativos+"</strong><i class='icon-thumbs-down'></i>  Negativos" +
                         "</div>" +
                         "</div>" +
                         "</div>");
