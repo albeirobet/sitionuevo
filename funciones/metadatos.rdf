@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:dcmitype="http://purl.org/dc/dcmitype/"
+	xmlns:admin="http://webns.net/mvcb/">
+
+<rdf:Description rdf:about="http://partiturasmusicales.capnix.com/">
+	<dc:title>Partituras Musicales Gratis</dc:title>
+	<dc:description>Esta web fue creada con el fin de poder descargar partituras musicales totalmente gratuitas y así mismo facilitar el trabajo de todos nosotros los que nos dedicamos a éste bello arte de la música, todo lo que hay aquí se puede descargar gratuitamente.</dc:description>
+	<dc:subject>
+		<rdf:Bag>
+			<rdf:li>partituras</rdf:li>
+			<rdf:li>gratis</rdf:li>
+			<rdf:li>orquesta</rdf:li>
+			<rdf:li>free</rdf:li>
+			<rdf:li>salsa</rdf:li>
+                        <rdf:li>bachata</rdf:li>
+                        <rdf:li>merengue</rdf:li>
+                        <rdf:li>ranchera</rdf:li>
+                        <rdf:li>mariachi</rdf:li>
+                        <rdf:li>compartir</rdf:li>
+                        <rdf:li>comunidad</rdf:li>
+                        <rdf:li>musica</rdf:li>
+                        <rdf:li>latina</rdf:li>
+		</rdf:Bag>
+	</dc:subject>
+	<dc:language>es</dc:language>
+	<dc:license rdfs:Literal="Licencia Creative Commons Atribución No Comercial No Derivada 2.5" />
+	<dcterms:Created><dcterms:W3CDTF><rdf:value>2012-octubre-17</rdf:value></dcterms:W3CDTF></dcterms:Created>
+	<dc:type rdfs:value="http://purl.org/dc/dcmitype/StillImage"/>
+	<dc:type rdfs:value="http://purl.org/dc/dcmitype/Text" />
+	<admin:generatorAgent rdf:resource="http://www.webposible.com/utilidades/dublincore-metadata-gen/" />
+</rdf:Description>
+</rdf:RDF>
