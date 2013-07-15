@@ -1,14 +1,17 @@
 var genero = "";
 var tituloGenero = "";
-var totalPag=0;
-var pos=false;
-var pre=false;
-var superior=0;
-var inferior=0;
-        
+var totalPag = 0;
+var pos = false;
+var pre = false;
+var superior = 0;
+var inferior = 0;
+var banderaPaginador = 0;
+var filtro ='';
+
 
 $(document).ready(function() {
     genero = $("#id_genero").val();
+    $("#divFiltros").hide();
     switch (genero)
     {
         case "s":
@@ -37,13 +40,14 @@ $(document).ready(function() {
 
     if (genero !== "error") {
         $("#titulo_genero").html(tituloGenero);
-
+        filtro = 'autor';
         cargarPorGenero(0);
         crearPaginador();
     } else {
         $('head').append('<META HTTP-EQUIV="Refresh" CONTENT="3; URL=partituras.php">');
     }
     navegacionPaginador();
+    filtroPartituras();
 });
 
 function crearPaginador() {
@@ -64,6 +68,7 @@ function crearPaginador() {
             totalPaginas = vectorPaginador[0];
             $("#titulo_genero").append(' ' + totalPartituras);
             if (totalPartituras < 25) {
+                banderaPaginador = 1;
                 totalPag = Math.ceil(totalPartituras / 5);
                 for (i = 0; i < totalPag; i++) {
                     var limit = i * 5;
@@ -95,9 +100,11 @@ function crearPaginador() {
         },
         complete: function() {
             console.log('acabe el acceso a la funcion crearPaginador');
-            inferior=1;
-            superior=5;
-            activarPaginas();
+            if (banderaPaginador !== 1) {
+                inferior = 1;
+                superior = 5;
+                activarPaginas();
+            }
         },
         cache: false,
         error: function(data, errorThrown)
@@ -114,7 +121,8 @@ function cargarPorGenero(Limite) {
         data: {
             funcion: "cargarPorGenero",
             genero: genero,
-            limite: Limite
+            limite: Limite,
+            filtro: filtro
         },
         async: true,
         beforeSend: function() {
@@ -164,7 +172,7 @@ function cargarPorGenero(Limite) {
         },
         complete: function() {
             console.log('acabe el acceso a la funcion cargarPorGenero: ');
-           // $("html, body").animate({scrollTop: 0}, 1250);
+             $("html, body").animate({scrollTop: 0}, 1250);
         },
         cache: false,
         error: function(data, errorThrown)
@@ -187,12 +195,18 @@ function navegacionPaginador() {
         $(".paginas").removeAttr("style");
         $(this).attr('style', 'text-decoration: underline; color : black');
         var siguiente = parseInt($(this).attr('posicion')) + 1;
-        $(".siguiente").attr('pos', siguiente);
+        if(siguiente<totalPag+1){
+          $(".siguiente").attr('pos', siguiente); 
+          $(".siguiente").show();  
+        }else{
+           $(".siguiente").hide();  
+        }
         var anterior = parseInt($(this).attr('posicion')) - 1;
+        if(anterior>0){
         $(".anterior").attr('pos', anterior);
-        alert('estoy clickeando la posiscion No: '+$(this).attr('posicion'));
-        if($(this).attr('posicion')%5===0){
-           pos=true;  
+        $(".anterior").show();
+        }else{
+         $(".anterior").hide();   
         }
         cargarPorGenero(limite);
     }
@@ -200,40 +214,61 @@ function navegacionPaginador() {
 
     $(document).on('click', '.anterior', function()
     {
-        
+        var multiplo = $(this).attr('pos') % 5;
+//        alert('este es el resultado de multiplo: '+multiplo);
         $("#pagina_" + $(this).attr('pos')).click();
-      
+        if (multiplo === 0) {
+
+            superior = parseInt($(this).attr('pos')) + 1;
+            inferior = parseInt($(this).attr('pos')) - 3;
+            if (inferior === 0)
+                inferior = 1;
+//            alert('voy a activar paginas con superior: '+superior+ ' inferior: '+inferior);
+            activarPaginas();
+        }
+
     }
     );
 
     $(document).on('click', '.siguiente', function()
     {
-        if(pos===true){
-            pos=false;
-            activarPaginas();   
+        var multiplo = (parseInt($(this).attr('pos')) - 1) % 5;
+//        alert('este es el resultado de multiplo: '+multiplo);
+        if (multiplo === 0) {
+
+            superior = parseInt($(this).attr('pos')) + 4;
+            inferior = parseInt($(this).attr('pos'));
+//            alert('voy a activar paginas con superior: '+superior+ ' inferior: '+inferior);
+            activarPaginas();
         }
         $("#pagina_" + $(this).attr('pos')).click();
     }
     );
 }
 
-function activarPaginas(){
-   if(superior<=totalPag&&inferior>=1){ 
-    contador =1;
-    $("li.oculto").each(function() {
-        if(contador>=inferior&&contador<=superior){
-        console.log('entre a activar las paginas con inferior: '+inferior+' superior: '+superior+' contador: '+contador);    
-        $(this).removeAttr("style");
-        $(this).attr('style', 'cursor: pointer'); 
-        contador++;
-        }else{
-            console.log('entre a desactivar las paginas con inferior: '+inferior+' superior: '+superior+' contador: '+contador);    
-        $(this).attr('style', 'display:none');    
-        contador++;
-        }
-});
+function activarPaginas() {
+    if(superior>totalPag)
+       superior=totalPag; 
+    if (superior <= totalPag && inferior >= 1) {
+        contador = 1;
+        $("li.oculto").each(function() {
+            if (contador >= inferior && contador <= superior) {
+                $(this).removeAttr("style");
+                $(this).attr('style', 'cursor: pointer');
+                contador++;
+            } else {
+                $(this).attr('style', 'display:none');
+                contador++;
+            }
+        });
+    }
+}
 
-inferior=superior+1;
-superior=superior+5;
-   }
+function filtroPartituras(){
+  $(".afiltro").click(function (){
+      $('#paginadorPartituras').html('');
+      filtro = ($(this).attr('valor'));
+      cargarPorGenero(0);
+      crearPaginador();
+  }); 
 }

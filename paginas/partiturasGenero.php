@@ -84,14 +84,7 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
                             <div class="span1">
                                 <h5 style="margin-left: 10px; width: 200px">Partituras <span id="titulo_genero"></span></h5>
                             </div>
-                            <!--                        <div class="span3">
-                                                        <form class="navbar-search pull-left" action="">
-                                                            <input type="text" class="search-query span2" placeholder="Buscar Partitura">
-                                                        </form>
-                                                    </div>-->
-
                         </div>
-
 
                     </div>
                 </div>
@@ -102,28 +95,42 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
             <!--inicio del Contenedor Principal-->
             <div class="container">         
                 <!--Inicio Logo Logo-->
-                <div style="text-align: center; margin: 65px 0;">                
-                    <p><a href="../index.php"> <img src="../img/logo.png"></a></p>
-
+                <div >                
+                    <p style="text-align: center; margin: 65px 0;"><a href="../index.php"> <img src="../img/logo.png"></a></p>
                 </div>
+
                 <!--Fin Logo Presentacion-->  
                 <!--            <h4 style="margin-top: -60px;">Categorias Disponibles:</h4>-->
 
 
-                   
-                
-                <div id="contenedorPartituras" class="row" style="margin-top: -60px;">               
-                    <div id="contenedorPartiturasCargadas">
-                        
-                    </div>
+
+
+                <div id="contenedorPartituras" class="row" style="margin-top: -92px;"> 
                     
-                
+                    <div class="btn-group span10">
+                            <button class="btn btn-mini">Filtrar por:</button>
+                            <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                            <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
+                                <li><a class="afiltro" valor="autor">Orden Alfabetico (Artista)</a></li>
+                                <li><a class="afiltro" valor="titulo">Orden Alfabetico (Titulo)</a></li>
+                                <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
+                                <li><a class="afiltro" valor="contador_descargas">Numero de Descargas</a></li>
+                                <li><a class="afiltro" valor="puntos_positivos">Puntos Negativos</a></li>
+                                <li><a class="afiltro" valor="puntos_negativos">Puntos Positivos</a></li>
+                            </ul>
+                    </div>
+                    <br><br>
+                    <div id="contenedorPartiturasCargadas">
+
+                    </div>
+
+
                     <div class="pagination pagination-centered" style="font-size: 11px;">
                         <ul id="paginadorPartituras">
-                          
+
                         </ul>
                     </div>
-                   
+
                 </div>
 
             </div>

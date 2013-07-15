@@ -188,11 +188,11 @@ include 'funciones/evitarCache.php';
                         </div>
 
                         <label class="checkbox terminosCondiciones">
-                            <input id="terminosCondiciones" type="checkbox" style="float: center"> Acepto los  <span><a href="#">Terminos y Condiciones</a></span>
+                            <input id="terminosCondiciones" type="checkbox" style="margin-left: -30px;"> Acepto los  <span><a href="#">Terminos y Condiciones</a></span>
                         </label>
 
                         <div>
-                            <input type="submit" value="Registrarse" class="boton btn btn-small btn-primary" style="margin-top: 6px;">
+                            <input type="submit" value="Registrarse" class="boton btn btn-primary" style="margin-top: 6px;">
                             <button  class="btn" data-dismiss="modal" aria-hidden="true" style="margin-top: 6px;">Cancelar</button>
                             <br>
                             <span id="informacionRegistro" ></span>
@@ -238,7 +238,7 @@ include 'funciones/evitarCache.php';
                         </div>
                         Fin Logo Presentacion  -->
 
-            <h4 >Partituras Disponibles: <strong class="text-info">4.500</strong></h4>
+            <h4 >Partituras Disponibles: <strong class="text-info" id="CantidadPartituras">4.500</strong></h4>
 
             <p class="tamventana" id="tamventana" style="font-size: 16px"></p>
             <hr>
@@ -246,77 +246,77 @@ include 'funciones/evitarCache.php';
             <div class="row">
                 <div class="span2 well well-large">                   
                     <dl>
-                        <dt>Ella Mintio</dt>
+                        <dt id="titulo_partitura_reciente_1"></dt>
                         <dd>Canci&oacute;n</dd>
                     </dl>
                     <img src="img/clave_reciente.png" class="img-circle">
                     <dl>
-                        <dt>Hector Lavoe</dt>
+                        <dt id="artista_partitura_reciente_1"></dt>
                         <dd>Artista</dd>
                     </dl>
-                    <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
+                    <p >Partitura donada por: <br>
+                        <strong id="donante_partitura_reciente_1"></strong><br>
                         Pais:<br>
-                        <strong>Colombia</strong>
+                        <strong id="pais_donante_partitura_reciente_1"></strong>
                     </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_reciente_1" href="" target="_blank">Descargar &raquo;</a>
                 </div>
                 <div class="span2 well well-large">                   
                     <dl>
-                        <dt>Ella Mintio</dt>
+                        <dt id="titulo_partitura_reciente_2"></dt>
                         <dd>Canci&oacute;n</dd>
                     </dl>
                     <img src="img/clave_reciente.png" class="img-circle">
                     <dl>
-                        <dt>Hector Lavoe</dt>
+                        <dt id="artista_partitura_reciente_2"></dt>
                         <dd>Artista</dd>
                     </dl>
-                    <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
+                    <p >Partitura donada por: <br>
+                        <strong id="donante_partitura_reciente_2"></strong><br>
                         Pais:<br>
-                        <strong>Colombia</strong>
+                        <strong id="pais_donante_partitura_reciente_2"></strong>
                     </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
-                </div>
-
-                <div class="span2 well well-large">                   
-                    <dl>
-                        <dt>Ella Mintio</dt>
-                        <dd>Canci&oacute;n</dd>
-                    </dl>
-                    <img src="img/clave_reciente.png" class="img-circle">
-                    <dl>
-                        <dt>Hector Lavoe</dt>
-                        <dd>Artista</dd>
-                    </dl>
-                    <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
-                        Pais:<br>
-                        <strong>Colombia</strong>
-                    </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_reciente_2" href="" target="_blank">Descargar &raquo;</a>
                 </div>
 
                 <div class="span2 well well-large">                   
                     <dl>
-                        <dt>Ella Mintio</dt>
+                        <dt id="titulo_partitura_reciente_3"></dt>
                         <dd>Canci&oacute;n</dd>
                     </dl>
                     <img src="img/clave_reciente.png" class="img-circle">
                     <dl>
-                        <dt>Hector Lavoe</dt>
+                        <dt id="artista_partitura_reciente_3"></dt>
                         <dd>Artista</dd>
                     </dl>
-                    <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
+                    <p >Partitura donada por: <br>
+                        <strong id="donante_partitura_reciente_3"></strong><br>
                         Pais:<br>
-                        <strong>Colombia</strong>
+                        <strong id="pais_donante_partitura_reciente_3"></strong>
                     </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_reciente_3" href="" target="_blank">Descargar &raquo;</a>
+                </div>
+
+                <div class="span2 well well-large">                   
+                    <dl>
+                        <dt id="titulo_partitura_reciente_4"></dt>
+                        <dd>Canci&oacute;n</dd>
+                    </dl>
+                    <img src="img/clave_reciente.png" class="img-circle">
+                    <dl>
+                        <dt id="artista_partitura_reciente_4"></dt>
+                        <dd>Artista</dd>
+                    </dl>
+                    <p >Partitura donada por: <br>
+                        <strong id="donante_partitura_reciente_4"></strong><br>
+                        Pais:<br>
+                        <strong id="pais_donante_partitura_reciente_4"></strong>
+                    </p>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_reciente_4" href="" target="_blank">Descargar &raquo;</a>
                 </div>
             </div>
             <div style="text-align: center;">                
-                <button class="btn btn-inverse" type="button">Ver Mass &raquo;</button>            
+                <a href="paginas/partituras.php"> <button class="btn btn-inverse" type="button">Ver Mass &raquo;</button></a>
             </div>
             <hr>
             <!--Fin Sección Partituras Nuevas-->
@@ -328,85 +328,88 @@ include 'funciones/evitarCache.php';
             <div class="row" id="masDescargadas">   
                 <div class="span2 well well-large">    
                     <dl>
-                        <dt>Ella Mintio</dt>
+                        <dt id="titulo_partitura_mas_descargada_1"></dt>
                         <dd>Canci&oacute;n</dd>
                     </dl>
                     <img src="img/clave_mas_descargada.png" class="img-circle">
                     <dl>
-                        <dt>Hector Lavoe</dt>
+                        <dt id="artista_partitura_mas_descargada_1"></dt>
                         <dd>Artista</dd>
                     </dl>
                     <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
+                        <strong id="donante_partitura_mas_descargada_1"></strong><br>
                         Pais:<br>
-                        <strong>Colombia</strong><br>
+                        <strong id="pais_donante_partitura_mas_descargada_1"></strong><br>
                         Numero Descargas:<br>                       
-                        <span class="badge badge-info">2888</span>
+                        <span class="badge badge-info" id="cantidad_descargas_partitura_mas_descargada_1"></span>
                     </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_1" href="" target="_blank" >Descargar &raquo;</a>
                 </div>
+               
                 <div class="span2 well well-large">    
                     <dl>
-                        <dt>Ella Mintio</dt>
+                        <dt id="titulo_partitura_mas_descargada_2"></dt>
                         <dd>Canci&oacute;n</dd>
                     </dl>
                     <img src="img/clave_mas_descargada.png" class="img-circle">
                     <dl>
-                        <dt>Hector Lavoe</dt>
+                        <dt id="artista_partitura_mas_descargada_2"></dt>
                         <dd>Artista</dd>
                     </dl>
                     <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
+                        <strong id="donante_partitura_mas_descargada_2"></strong><br>
                         Pais:<br>
-                        <strong>Colombia</strong><br>
+                        <strong id="pais_donante_partitura_mas_descargada_2"></strong><br>
                         Numero Descargas:<br>                       
-                        <span class="badge badge-info">2888</span>
+                        <span class="badge badge-info" id="cantidad_descargas_partitura_mas_descargada_2"></span>
                     </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_2" href="" target="_blank">Descargar &raquo;</a>
                 </div>
+                
                 <div class="span2 well well-large">    
                     <dl>
-                        <dt>Ella Mintio</dt>
+                        <dt id="titulo_partitura_mas_descargada_3"></dt>
                         <dd>Canci&oacute;n</dd>
                     </dl>
                     <img src="img/clave_mas_descargada.png" class="img-circle">
                     <dl>
-                        <dt>Hector Lavoe</dt>
+                        <dt id="artista_partitura_mas_descargada_3"></dt>
                         <dd>Artista</dd>
                     </dl>
                     <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
+                        <strong id="donante_partitura_mas_descargada_3"></strong><br>
                         Pais:<br>
-                        <strong>Colombia</strong><br>
+                        <strong id="pais_donante_partitura_mas_descargada_3"></strong><br>
                         Numero Descargas:<br>                       
-                        <span class="badge badge-info">2888</span>
+                        <span class="badge badge-info" id="cantidad_descargas_partitura_mas_descargada_3"></span>
                     </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_3"  href="" target="_blank">Descargar &raquo;</a>
                 </div>
+                
                 <div class="span2 well well-large">    
                     <dl>
-                        <dt>Ella Mintio</dt>
+                        <dt id="titulo_partitura_mas_descargada_4"></dt>
                         <dd>Canci&oacute;n</dd>
                     </dl>
                     <img src="img/clave_mas_descargada.png" class="img-circle">
                     <dl>
-                        <dt>Hector Lavoe</dt>
+                        <dt id="artista_partitura_mas_descargada_4"></dt>
                         <dd>Artista</dd>
                     </dl>
                     <p>Partitura donada por: <br>
-                        <strong>Pedro Paz Perez</strong><br>
+                        <strong id="donante_partitura_mas_descargada_4"></strong><br>
                         Pais:<br>
-                        <strong>Colombia</strong><br>
+                        <strong id="pais_donante_partitura_mas_descargada_4"></strong><br>
                         Numero Descargas:<br>                       
-                        <span class="badge badge-info">2888</span>
+                        <span class="badge badge-info" id="cantidad_descargas_partitura_mas_descargada_4"></span>
                     </p>
-                    <p><a class="btn btn-mini btn-primary" href="#">Descargar &raquo;</a>
+                    <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_4" href="" target="_blank">Descargar &raquo;</a>
                 </div>
-
-
+                
+               
             </div>
             <div style="text-align: center;">                
-                <button class="btn btn-inverse" type="button">Ver Mass &raquo;</button>            
+                <a href="paginas/partituras.php"> <button class="btn btn-inverse" type="button">Ver Mass &raquo;</button></a>
             </div>  
             <hr>
             <!--Fin Partituras Mas Descargadas-->
@@ -471,4 +474,6 @@ include 'funciones/evitarCache.php';
             <?php
         }
         ?>
+
+    </body>
 </html>

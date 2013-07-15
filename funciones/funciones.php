@@ -8,6 +8,21 @@ if ($metodo == "cargarGeneros"||$metodo == "cargarPorGenero") {
 } else {
     $metodo();
 }
+
+function getCantidadPartituras(){
+  include 'conectar.php';
+    $sqlConsultar = "SELECT COUNT( id ) AS Cantidad FROM partituras_subidas";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $Cantidad = "";
+    while ($row = @mysql_fetch_array($result)) {
+        $Cantidad = $row['Cantidad'];
+    }
+    $arr[0] = array(
+        'Cantidad' => $Cantidad,);
+    echo '' . json_encode($arr) . '';
+    include 'desconectar.php'; 
+}
+
 function cargarRecientes() {
     include 'conectar.php';
     $sqlConsultar = "SELECT * FROM partituras_subidas ORDER BY id DESC LIMIT 9";
@@ -46,8 +61,13 @@ function cargarGeneros($genero) {
 function cargarPorGenero($genero){
  include 'conectar.php';
  $limite = $_POST['limite'];
+ $filtro = $_POST['filtro'];
+ $fil='';
+ $fil = 'ASC';
+ if($filtro=='fecha'||$filtro=='puntos_positivos'||$filtro=='puntos_negativos')
+ $fil="DESC";    
     
-    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =   '$genero' ORDER BY autor ASC  LIMIT $limite, 5";
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =   '$genero' ORDER BY $filtro $fil  LIMIT $limite, 5";
     $result = mysql_query($sqlConsultar, $conexion);
     $contador = 0;
     while ($row = @mysql_fetch_array($result)) {
