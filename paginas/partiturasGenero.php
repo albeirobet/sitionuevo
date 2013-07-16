@@ -105,53 +105,38 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
 
 
 
-                <div id="contenedorPartituras" class="row" style="margin-top: -92px;"> 
-                    
-<!--                    <div class="btn-group span10">
-                            <button class="btn btn-mini">Filtrar por:</button>
-                            <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                            <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
-                                <li><a class="afiltro" valor="autor">Orden Alfabetico (Artista)</a></li>
-                                <li><a class="afiltro" valor="titulo">Orden Alfabetico (Titulo)</a></li>
-                                <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
-                                <li><a class="afiltro" valor="contador_descargas">Numero de Descargas</a></li>
-                                <li><a class="afiltro" valor="puntos_positivos">Puntos Positivos</a></li>
-                                <li><a class="afiltro" valor="puntos_negativos">Puntos Negativos</a></li>                                
-                            </ul>
+                <div id="contenedorPartituras" class="row" style="margin-top: -65px;"> 
+                    <div class="btn-group span10" id="busquedaFiltros">
+                        <button class="btn btn-mini">Filtrar por:</button>
+                        <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                        <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
+                            <li><a class="afiltro" valor="autor">Orden Alfab&eacute;tico (Artista)</a></li>
+                            <li><a class="afiltro" valor="titulo">Orden Alfab&eacute;tico (T&iacute;tulo)</a></li>
+                            <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
+                            <li><a class="afiltro" valor="contador_descargas">N&uacute;mero de Descargas</a></li>
+                            <li><a class="afiltro" valor="puntos_positivos">Puntos Positivos</a></li>
+                            <li><a class="afiltro" valor="puntos_negativos">Puntos Negativos</a></li>  
+                            <li class="divider"></li>
+                            <li><a class="afiltro" valor="activar_busqueda_especifica"><strong>B&uacute;squeda Espec&iacute;fica</strong></a></li>   
+                        </ul>
                     </div>
-                   -->
-                    
-                        <div class="btn-group span5">
-                                <button class="btn btn-mini">Filtrar por:</button>
-                                <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                                <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
-                                    <li><a class="afiltro" valor="autor">Orden Alfabetico (Artista)</a></li>
-                                    <li><a class="afiltro" valor="titulo">Orden Alfabetico (Titulo)</a></li>
-                                    <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
-                                    <li><a class="afiltro" valor="contador_descargas">Numero de Descargas</a></li>
-                                    <li><a class="afiltro" valor="puntos_positivos">Puntos Positivos</a></li>
-                                    <li><a class="afiltro" valor="puntos_negativos">Puntos Negativos</a></li>                                
-                                </ul>
-                        </div>
-                  
-                    <div class="input-append">
-                        <input class="input-medium" id="appendedDropdownButton" type="text" style="height: 12px;">
+
+                    <div class="input-prepend span10" id="busquedaEspecifica">
                         <div class="btn-group">
                             <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
                                 Buscar por:
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
-                             <li><a class="afiltro" valor="autor">Orden Alfabetico (Artista)</a></li>
-                            <li><a class="afiltro" valor="titulo">Orden Alfabetico (Titulo)</a></li>
-                            <li><a class="afiltro" valor="fecha_publicacion">Fecha Publicaci&oacute;n</a></li>
-                            <li><a class="afiltro" valor="contador_descargas">Numero de Descargas</a></li>
-                            <li><a class="afiltro" valor="puntos_positivos">Puntos Positivos</a></li>
-                            <li><a class="afiltro" valor="puntos_negativos">Puntos Negativos</a></li>    
+<!--                                <li><a class="filtroEspecifico" valor="titulo">T&iacute;tulo Partitura</a></li>
+                                <li><a class="filtroEspecifico" valor="autor">Nombre Artista</a></li>
+                                <li class="divider"></li>-->
+                                <li><a class="afiltro" valor="activar_busqueda_filtros"><strong>Activar Filtros</strong></a></li>
                             </ul>
                         </div>
+                        <input id="palabra_buscar"  required="required" type="text" style="height: 12px;" placeholder="Artista &oacute; Partitura">
                     </div>
-                    
+
                     <br><br>
                     <div id="contenedorPartiturasCargadas">
 

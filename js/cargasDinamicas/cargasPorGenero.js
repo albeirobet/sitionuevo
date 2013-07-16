@@ -6,12 +6,13 @@ var pre = false;
 var superior = 0;
 var inferior = 0;
 var banderaPaginador = 0;
-var filtro ='';
-
+var filtro = '';
+var palabra = '';
+var criterio = '';
 
 $(document).ready(function() {
     genero = $("#id_genero").val();
-    $("#divFiltros").hide();
+    $("#busquedaEspecifica").hide();
     switch (genero)
     {
         case "s":
@@ -56,7 +57,8 @@ function crearPaginador() {
         url: '../funciones/funciones.php',
         data: {
             funcion: "contadorPartiturasPorGenero",
-            genero: genero
+            genero: genero,
+            palabra: palabra
         },
         asycn: false,
         beforeSend: function() {
@@ -122,7 +124,8 @@ function cargarPorGenero(Limite) {
             funcion: "cargarPorGenero",
             genero: genero,
             limite: Limite,
-            filtro: filtro
+            filtro: filtro,
+            palabra: palabra
         },
         async: true,
         beforeSend: function() {
@@ -144,6 +147,7 @@ function cargarPorGenero(Limite) {
                 var fechaPublicacion = fechaVector.split(' ');
                 var puntos_positivos = item.PuntosPositivos;
                 var puntos_negativos = item.PuntosNegativos;
+                var Donador = item.Donador;
                 fechaPublicacion = fechaPublicacion[0];
                 //console.log(id+" "+link+" "+titulo+" "+autor);
 
@@ -157,15 +161,15 @@ function cargarPorGenero(Limite) {
                         "<h4 class='media-heading'>" + titulo + "</h4>" +
                         "<h6 class='media-heading'><strong>" + autor + "</strong></h6>" +
                         "Partitura publicada el <strong>" + fechaPublicacion + "</strong><br>" +
-                        "Enviada por <strong>Marc Anthony</strong><br>" +
+                        "Enviada por <strong>" + Donador + "</strong><br>" +
                         "<a href='" + link + "' target='_blank'><i class='icon-download-alt'></i> Descargar</a>" +
                         "</div>" +
                         "</div>" +
-                        " <div class='span2'>" +
+                        " <div class='span3'>" +
                         "<h5 class='media-heading' style='margin-left: 40px;'>Estad&iacute;sticas</h5>" +
                         "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>" + contadorDescargas + "</strong><i class='icon-tasks'></i> Descargas<br>" +
-                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>"+puntos_positivos+"</strong><i class='icon-thumbs-up'></i> Positivos<br>" +
-                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>"+puntos_negativos+"</strong><i class='icon-thumbs-down'></i>  Negativos" +
+                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>" + puntos_positivos + "</strong><i class='icon-thumbs-up'></i> Positivos<br>" +
+                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>" + puntos_negativos + "</strong><i class='icon-thumbs-down'></i>  Negativos" +
                         "</div>" +
                         "</div>" +
                         "</div>");
@@ -174,7 +178,7 @@ function cargarPorGenero(Limite) {
         },
         complete: function() {
             console.log('acabe el acceso a la funcion cargarPorGenero: ');
-             $("html, body").animate({scrollTop: 0}, 1250);
+            $("html, body").animate({scrollTop: 0}, 1250);
         },
         cache: false,
         error: function(data, errorThrown)
@@ -197,18 +201,18 @@ function navegacionPaginador() {
         $(".paginas").removeAttr("style");
         $(this).attr('style', 'text-decoration: underline; color : black');
         var siguiente = parseInt($(this).attr('posicion')) + 1;
-        if(siguiente<totalPag+1){
-          $(".siguiente").attr('pos', siguiente); 
-          $(".siguiente").show();  
-        }else{
-           $(".siguiente").hide();  
+        if (siguiente < totalPag + 1) {
+            $(".siguiente").attr('pos', siguiente);
+            $(".siguiente").show();
+        } else {
+            $(".siguiente").hide();
         }
         var anterior = parseInt($(this).attr('posicion')) - 1;
-        if(anterior>0){
-        $(".anterior").attr('pos', anterior);
-        $(".anterior").show();
-        }else{
-         $(".anterior").hide();   
+        if (anterior > 0) {
+            $(".anterior").attr('pos', anterior);
+            $(".anterior").show();
+        } else {
+            $(".anterior").hide();
         }
         cargarPorGenero(limite);
     }
@@ -249,8 +253,8 @@ function navegacionPaginador() {
 }
 
 function activarPaginas() {
-    if(superior>totalPag)
-       superior=totalPag; 
+    if (superior > totalPag)
+        superior = totalPag;
     if (superior <= totalPag && inferior >= 1) {
         contador = 1;
         $("li.oculto").each(function() {
@@ -266,11 +270,56 @@ function activarPaginas() {
     }
 }
 
-function filtroPartituras(){
-  $(".afiltro").click(function (){
-      $('#paginadorPartituras').html('');
-      filtro = ($(this).attr('valor'));
-      cargarPorGenero(0);
-      crearPaginador();
-  }); 
+function filtroPartituras() {
+    $(".afiltro").click(function() {
+        $('#paginadorPartituras').html('');
+        filtro = ($(this).attr('valor'));
+        if (filtro === 'activar_busqueda_especifica' || filtro === 'activar_busqueda_filtros') {
+            if (filtro === 'activar_busqueda_especifica') {
+                $("#busquedaEspecifica").show();
+                $("#busquedaFiltros").hide();
+            }
+            if (filtro === 'activar_busqueda_filtros') {
+                $("#busquedaFiltros").show();
+                $("#busquedaEspecifica").hide();
+            }
+
+        } else {
+            cargarPorGenero(0);
+            crearPaginador();
+        }
+    });
+
+
+    $(".filtroEspecifico").click(function() {
+        var pal = $("#palabra_buscar").val();
+
+        if (pal !== '') {
+            palabra = pal;
+            criterio = $(this).attr('valor');
+            $('#paginadorPartituras').html('');
+            cargarPorGenero(0);
+            crearPaginador();
+        } else {
+            $("#palabra_buscar").focus();
+        }
+    });
+
+    $('#palabra_buscar').keypress(function(e) {
+        if (e.which == 13) {
+            var pal = $("#palabra_buscar").val();
+
+            if (pal !== '') {
+                palabra = pal;
+                $('#paginadorPartituras').html('');
+                cargarPorGenero(0);
+                crearPaginador();
+                palabra = '';
+            } else {
+                $("#palabra_buscar").focus();
+            }
+        }
+
+    });
+
 }

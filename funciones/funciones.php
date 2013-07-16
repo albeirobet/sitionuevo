@@ -1,12 +1,25 @@
 <?php
 
-//
+require_once('geoplugin.class.php');
+
 $metodo = $_POST['funcion'];
 if ($metodo == "cargarGeneros" || $metodo == "cargarPorGenero") {
     $genero = $_POST['genero'];
     $metodo($genero);
 } else {
     $metodo();
+}
+
+
+function ObtenerDatosGeolocalizacion() {
+    $geoplugin = new geoPlugin();
+    $geoplugin->locate();
+    $ip = $geoplugin->ip;
+    $ciudad = $geoplugin->city;
+    $region = $geoplugin->region;
+    $pais = $geoplugin->countryName;
+    $arregloDatos = array('ip' => $ip, 'ciudad' => $ciudad, 'region' => $region, 'pais' => $pais);
+    return $arregloDatos;
 }
 
 function getCantidadPartituras() {
@@ -61,12 +74,21 @@ function cargarPorGenero($genero) {
     include 'conectar.php';
     $limite = $_POST['limite'];
     $filtro = $_POST['filtro'];
+    $palabra = $_POST['palabra'];
+    $busquedaEspecifica = '';
+    if ($palabra != '') {
+        $busquedaEspecifica = "AND titulo LIKE  '%$palabra%' OR autor LIKE  '%$palabra%'";
+        $filtro = 'titulo';
+    }
     $fil = '';
     $fil = 'ASC';
-    if ($filtro == 'fecha_publicacion' || $filtro == 'puntos_positivos' || $filtro == 'puntos_negativos' || $filtro == 'contador_descargas')
+    if ($filtro == 'puntos_positivos' || $filtro == 'puntos_negativos' || $filtro == 'contador_descargas')
         $fil = "DESC";
-
-    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =   '$genero' ORDER BY $filtro $fil  LIMIT $limite, 5";
+    if ($filtro == 'fecha_publicacion') {
+        $filtro = 'id';
+        $fil = "DESC";
+    }
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =   '$genero' $busquedaEspecifica  ORDER BY $filtro $fil  LIMIT $limite, 5";
     $result = mysql_query($sqlConsultar, $conexion);
     $contador = 0;
     while ($row = @mysql_fetch_array($result)) {
@@ -77,15 +99,9 @@ function cargarPorGenero($genero) {
             'Fecha' => $row['fecha_publicacion'],
             'PuntosPositivos' => $row['puntos_positivos'],
             'PuntosNegativos' => $row['puntos_negativos'],
+            'Donador' => $row['donada_por'],
             'Contador' => $row['contador_descargas']);
         $contador++;
-        $id = $row['id'];
-        $genero = $row['genero'];
-        $titulo = $row['titulo'];
-        $autor = $row['autor'];
-        $link_descarga = $row['link_descarga'];
-        $insercionTemporal = "INSERT INTO temporal_salsa (id, genero, titulo, autor, link_descarga) values($id,'$genero','$titulo', '$autor', '$link_descarga')";
-        mysql_query($insercionTemporal, $conexion);
     }
     include 'desconectar.php';
     array_push($arr);
@@ -95,7 +111,12 @@ function cargarPorGenero($genero) {
 function contadorPartiturasPorGenero() {
     include 'conectar.php';
     $genero = $_POST['genero'];
-    $sqlConsultar = "SELECT count(id) Contador FROM partituras_subidas WHERE genero = '$genero' ORDER BY autor ASC";
+    $palabra = $_POST['palabra'];
+    $busquedaEspecifica = '';
+    if ($palabra != '') {
+        $busquedaEspecifica = "AND titulo LIKE  '%$palabra%' OR autor LIKE  '%$palabra%'";
+    }
+    $sqlConsultar = "SELECT count(id) Contador FROM partituras_subidas WHERE genero = '$genero' $busquedaEspecifica ORDER BY autor ASC";
     $result = mysql_query($sqlConsultar, $conexion);
     $total;
     while ($row = @mysql_fetch_array($result)) {
@@ -105,6 +126,61 @@ function contadorPartiturasPorGenero() {
     echo $totalPaginas . "%" . $total;
     include 'desconectar.php';
 }
+
+//SE PUEDE BORRAR CUANDO SUBA SITIO NUEVO
+function cargarGeneroSalsa() {
+    include 'conectar.php';
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Salsa'ORDER BY id DESC LIMIT 10";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+function cargarGeneroMerengue() {
+    include 'conectar.php';
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Merengue' ORDER BY id DESC LIMIT 10";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+function cargarGeneroVariado() {
+    include 'conectar.php';
+    $sqlConsultar = "SELECT * FROM  `partituras_subidas` WHERE genero <>  'Salsa' AND genero <>  'Merengue' ORDER BY id DESC LIMIT 10";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+//FIN SE PUEDE BORRAR CUANDO SUBA SITIO NUEVO
+
 
 function cargarTodasSalsa() {
     include 'conectar.php';
@@ -360,7 +436,7 @@ function ingresoNuevaPartitura() {
     $titulo = $_POST['titulo'];
     $autor = $_POST['autor'];
     $link = $_POST['link'];
-    $fecha = date("d-m-Y H:i:s");
+    $fecha = date("d-m-Y");
     $insertar = "INSERT INTO partituras_subidas (genero, titulo, autor, link_descarga, fecha_publicacion) VALUES ('$genero', '$titulo', '$autor','$link','$fecha') ";
     mysql_query($insertar, $conexion);
     include 'desconectar.php';
@@ -582,7 +658,14 @@ function registroUsuarios() {
     $codigoverificacion = rand(0000000000, 9999999999);
     $total = mysql_num_rows(mysql_query("SELECT id FROM tbl_users WHERE user='$user' or email='$email'"));
     if ($total == 0) {
-        $insertar = "INSERT INTO tbl_users (tipo_usuario, nombres, user, pass, email, fecha_registro, estado, codigo_verificacion) VALUES ('Usuario', '$nombres', '$user','$password','$email', '$fechaRegistro', 'Activo',$codigoverificacion) ";
+
+        $datosLocalizacion = ObtenerDatosGeolocalizacion();
+        $ip = $datosLocalizacion['ip'];
+        $ciudad = $datosLocalizacion['ciudad'];
+        $region = $datosLocalizacion['region'];
+        $pais = $datosLocalizacion['pais'];
+
+        $insertar = "INSERT INTO tbl_users (tipo_usuario, nombres, user, pass, email, fecha_registro, estado, codigo_verificacion, ip, ciudad, region, pais) VALUES ('Usuario', '$nombres', '$user','$password','$email', '$fechaRegistro', 'Activo',$codigoverificacion, '$ip', '$ciudad', '$region', '$pais') ";
         mysql_query($insertar, $conexion);
 
         $destinatario = $_POST['email_register'];
@@ -639,6 +722,13 @@ function loginUsuarios() {
                     $_SESSION["Correo_Usuario"] = $row['email'];
                     $_SESSION["Tipo_Usuario"] = $row['tipo_usuario'];
                     $arr[0] = array('estado' => '2');
+                    $datosLocalizacion = ObtenerDatosGeolocalizacion();
+                    $ip = $datosLocalizacion['ip'];
+                    $ciudad = $datosLocalizacion['ciudad'];
+                    $region = $datosLocalizacion['region'];
+                    $pais = $datosLocalizacion['pais'];
+                    $sql = "update tbl_users set ip = '$ip', ciudad = '$ciudad', region = '$region', pais = '$pais' where user='$nombre_Usuario'";
+                    mysql_query($sql, $conexion);
                     break;
                 }
             }
@@ -654,6 +744,13 @@ function loginUsuarios() {
                     $_SESSION["Correo_Usuario"] = $row1['email'];
                     $_SESSION["Tipo_Usuario"] = $row1['tipo_usuario'];
                     $arr[0] = array('estado' => '1');
+                    $datosLocalizacion = ObtenerDatosGeolocalizacion();
+                    $ip = $datosLocalizacion['ip'];
+                    $ciudad = $datosLocalizacion['ciudad'];
+                    $region = $datosLocalizacion['region'];
+                    $pais = $datosLocalizacion['pais'];
+                    $sql = "update tbl_users set ip = '$ip', ciudad = '$ciudad', region = '$region', pais = '$pais' where user='$nombre_Usuario'";
+                    mysql_query($sql, $conexion);
                     break;
                 }
             }
