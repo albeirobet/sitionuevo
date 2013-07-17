@@ -8,6 +8,7 @@ $(document).ready(function() {
     loadScoresGenero('Merengue');
     loadScoresGenero('Cumbia');
     loadScoresGenero('Varios');
+    ActualizarContadorDescargasPartitura();
     ActivarMensajesTooltips();
 });
 

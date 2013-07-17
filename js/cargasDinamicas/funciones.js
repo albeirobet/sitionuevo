@@ -143,11 +143,9 @@ function getCantidadPartituras(){
         type: "POST",
         url:"funciones/funciones.php",
         data: "funcion=getCantidadPartituras",
-       
-       // async: false,
         dataType: 'text',
         beforeSend: function(data) {
-          //  $('#ajax-loader').show();
+        activarObjetoAjax(1);
         },
         success: function(data)
         {
@@ -155,8 +153,7 @@ function getCantidadPartituras(){
             $("#CantidadPartituras").text(dataJson[0].Cantidad);
         },
         complete: function() {
-//            $("#btnEnviAudit").show();
-//            $('#ajax-loader').hide();
+        activarObjetoAjax(0);
         }
     });
 }
@@ -168,6 +165,7 @@ function getPartiturasRecientes(){
         data: "funcion=cargarRecientes",
         dataType: 'text',
         beforeSend: function(data) {
+            activarObjetoAjax(1);
         },
         success: function(data)
         {
@@ -185,6 +183,7 @@ function getPartiturasRecientes(){
             });
         },
         complete: function() {
+     activarObjetoAjax(0);
         }
     }); 
 }
@@ -196,6 +195,7 @@ function getPartiturasMasDescargadas(){
         data: "funcion=topDescargas",
         dataType: 'json',
         beforeSend: function(data) {
+            activarObjetoAjax(1);
         },
         success: function(data)
         {
@@ -212,6 +212,7 @@ function getPartiturasMasDescargadas(){
             });
         },
         complete: function() {
+            activarObjetoAjax(0);
         }
     }); 
 }
@@ -223,4 +224,11 @@ function is_email(email) {
     } else {
         return false;
     }
+}
+
+function activarObjetoAjax(estado){
+    if(estado === 1)
+    $('#ajaxModal').modal({backdrop: 'static',  keyboard: false});    
+    if(estado === 0) 
+    $('#ajaxModal').modal('hide');
 }

@@ -10,6 +10,9 @@ $(document).ready(function() {
             type: 'POST',
             url: 'funciones/funciones.php',
             data: $(this).serialize(),
+            beforeSend: function(data) {
+                activarObjetoAjax(1);
+            },
             success: function(data) {
                 var dataJson = eval(data);
                 var estado = dataJson[0].estado;
@@ -37,6 +40,9 @@ $(document).ready(function() {
                         $('#password_login').val('');
                     }
                 }
+            },
+            complete: function() {
+                activarObjetoAjax(0);
             }
         })
         return false;
@@ -49,11 +55,14 @@ $(document).ready(function() {
             type: 'POST',
             url: 'funciones/funciones.php',
             data: $(this).serialize(),
+            beforeSend: function(data) {
+                activarObjetoAjax(1);
+            },
             success: function(data) {
                 var dataJson = eval(data);
                 var estado = dataJson[0].estado;
                 if (estado == '1') {
-                     $("#sinConfirmacion").css("display", "none");
+                    $("#sinConfirmacion").css("display", "none");
                     $("#esperandoConfirmacion").css("display", "none");
                     cuentaRegresivaRecovery();
                 }
@@ -63,6 +72,9 @@ $(document).ready(function() {
                         $("#esperandoConfirmacion").css("display", "none");
                     }
                 }
+            },
+            complete: function() {
+                activarObjetoAjax(0);
             }
         })
         return false;
@@ -77,6 +89,9 @@ $(document).ready(function() {
                 type: 'POST',
                 url: 'funciones/funciones.php',
                 data: $(this).serialize(),
+                beforeSend: function(data) {
+                    activarObjetoAjax(1);
+                },
                 success: function(data) {
                     var dataJson = eval(data);
                     var estado = dataJson[0].estado;
@@ -88,6 +103,9 @@ $(document).ready(function() {
                         $('#username').val('');
                         $('#email_register').val('');
                     }
+                },
+                complete: function() {
+                    activarObjetoAjax(0);
                 }
             })
         } else {
@@ -140,7 +158,7 @@ function cuentaRegresivaRecovery() {
     else {
         window.location = 'index.php';
     }
-     $("#Confirmacionhecha").css("display", "block");
+    $("#Confirmacionhecha").css("display", "block");
     setTimeout("cuentaRegresivaRecovery()", 1000)
 }
 
@@ -157,18 +175,18 @@ function comprobarCaracter(username) {
 
 function limpiaForm(miForm) {
 // recorremos todos los campos que tiene el formulario
-$(":input", miForm).each(function() {
-var type = this.type;
-var tag = this.tagName.toLowerCase();
+    $(":input", miForm).each(function() {
+        var type = this.type;
+        var tag = this.tagName.toLowerCase();
 //limpiamos los valores de los campos…
-if (type == "text" || type == "password" || tag == "textarea"|| type == "email")
-this.value = "";
+        if (type == "text" || type == "password" || tag == "textarea" || type == "email")
+            this.value = "";
 // excepto de los checkboxes y radios, le quitamos el checked
 // pero su valor no debe ser cambiado
-else if (type == "checkbox" || type == "radio")
-this.checked = false;
+        else if (type == "checkbox" || type == "radio")
+            this.checked = false;
 // los selects le ponesmos el indice a -
-else if (tag =="select")
-this.selectedIndex = -1;
-});
+        else if (tag == "select")
+            this.selectedIndex = -1;
+    });
 }

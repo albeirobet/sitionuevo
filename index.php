@@ -43,8 +43,18 @@ include 'funciones/evitarCache.php';
                                 <a href="#">
                                     <i id="activo_inicio" class="icon-home"></i> Inicio </a>
                             </li>
-                            <li class="activo_partituras">
-                                <a href="paginas/partituras.php"><i  id="activo_partituras" class="icon-music"></i> Partituras</a>
+                            <li class="dropdown activo_partituras">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i  id="activo_partituras" class="icon-music"></i> Partituras <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="paginas/partituras.php">Todas</a></li>
+                                    <li class="divider"></li>
+                                    <li class="nav-header">Generos</li>
+                                    <li><a href="paginas/partiturasGenero.php?g=s">Salsa</a></li>
+                                    <li><a href="paginas/partiturasGenero.php?g=m">Merengue</a></li>
+                                    <li><a href="paginas/partiturasGenero.php?g=c">Cumbia</a></li>
+                                    <li><a href="paginas/partiturasGenero.php?g=mx">Mexicana</a></li>
+                                    <li><a href="paginas/partiturasGenero.php?g=v">Varios</a></li>
+                                </ul>
                             </li>
                             <li class="activo_quienes_somos">
                                 <a href="paginas/quiensomos.php"><i id="activo_quienes_somos" class="icon-question-sign"></i> &#191;Quienes Somos?</a>
@@ -54,24 +64,27 @@ include 'funciones/evitarCache.php';
                             </li>           
                             <?php
                             session_start();
-                            if (isset($_SESSION['Administrador']) && isset($_SESSION['Usuario'])) {
-                                if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
-                                    $nombreUsuario = $_SESSION["Nombre_Usuario"];
-                                    ?>
-
-                                    <li>
-                                        <div class="btn-group">
-                                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <span class="caret"></span></button>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#"><i class="icon-share"></i> Donar Partitura</a></li>
-                                                <li><a href="#"><i class="icon-edit"></i> Editar Perfil</a></li>
-                                                <li class="divider"></li>
-                                                <li><a style="cursor: pointer;" onclick="cerrarSesionIndex()"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <?php
-                                }
+                            if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
+                                $nombreUsuario = $_SESSION["Nombre_Usuario"];
+                                ?>
+                                <li class="active dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#"><i class="icon-share"></i> Donar Partitura</a></li>
+                                        <li><a href="#"><i class="icon-edit"></i> Editar Perfil</a></li>
+                                        <li><a style="cursor: pointer;" onclick="cerrarSesionIndex()"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a></li>
+                                        <?php
+                                        if ($_SESSION['Tipo_Usuario'] == 'Administrador') {
+                                            ?>  
+                                            <li class="divider"></li>
+                                            <li class="nav-header">Administradores</li>
+                                            <li><a href="#"><i class="icon-wrench"></i> Gestionar Web</a></li>
+                                            <?php
+                                        }
+                                        ?> 
+                                    </ul>
+                                </li>
+                                <?php
                             } else {
                                 ?>
                                 <li class="activo_login_registro">
@@ -186,17 +199,15 @@ include 'funciones/evitarCache.php';
                             <label ><strong>Correo Electronico:</strong></label>
                             <input type='email' class='email_register' value=''  id="email_register" name="email_register"  placeholder="Correo Electronico" required="required">
                         </div>
-
-                        <label class="checkbox terminosCondiciones">
-                            <input id="terminosCondiciones" type="checkbox" style="margin-left: -30px;"> Acepto los  <span><a href="#">Terminos y Condiciones</a></span>
-                        </label>
-
+                        <div class="row-fluid">
+                            <input id="terminosCondiciones" type="checkbox">   
+                            Acepto los  <span><a href="#">Terminos y Condiciones</a></span>
+                        </div>
                         <div>
                             <input type="submit" value="Registrarse" class="boton btn btn-primary" style="margin-top: 6px;">
                             <button  class="btn" data-dismiss="modal" aria-hidden="true" style="margin-top: 6px;">Cancelar</button>
                             <br>
                             <span id="informacionRegistro" ></span>
-
                         </div>
                     </form>
                     <br><br>
@@ -345,7 +356,7 @@ include 'funciones/evitarCache.php';
                     </p>
                     <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_1" href="" target="_blank" >Descargar &raquo;</a>
                 </div>
-               
+
                 <div class="span2 well well-large">    
                     <dl>
                         <dt id="titulo_partitura_mas_descargada_2"></dt>
@@ -365,7 +376,7 @@ include 'funciones/evitarCache.php';
                     </p>
                     <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_2" href="" target="_blank">Descargar &raquo;</a>
                 </div>
-                
+
                 <div class="span2 well well-large">    
                     <dl>
                         <dt id="titulo_partitura_mas_descargada_3"></dt>
@@ -385,7 +396,7 @@ include 'funciones/evitarCache.php';
                     </p>
                     <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_3"  href="" target="_blank">Descargar &raquo;</a>
                 </div>
-                
+
                 <div class="span2 well well-large">    
                     <dl>
                         <dt id="titulo_partitura_mas_descargada_4"></dt>
@@ -405,8 +416,8 @@ include 'funciones/evitarCache.php';
                     </p>
                     <p><a class="btn btn-mini btn-primary contadorDescargas" id="link_partitura_mas_descargada_4" href="" target="_blank">Descargar &raquo;</a>
                 </div>
-                
-               
+
+
             </div>
             <div style="text-align: center;">                
                 <a href="paginas/partituras.php"> <button class="btn btn-inverse" type="button">Ver Mass &raquo;</button></a>
@@ -459,7 +470,7 @@ include 'funciones/evitarCache.php';
 
         <!--Fin Carga de Scripts-->        
         <script language="javascript">
-                                         
+
 
         </script>
 
@@ -474,6 +485,11 @@ include 'funciones/evitarCache.php';
             <?php
         }
         ?>
-
+        <div id="ajaxModal" class="modal hide fade" tabindex="-1" data-keyboard="false" data-backdrop="static" style="height: 35px;">
+            <div class="progress progress-striped active">
+                <div class="bar" style="width: 100%;"></div>
+            </div>
+            <p class="text-center" style="margin-top: -23px">Espere por favor.</p>
+        </div>
     </body>
 </html>

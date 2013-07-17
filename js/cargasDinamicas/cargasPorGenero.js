@@ -40,7 +40,7 @@ $(document).ready(function() {
     }
 
     if (genero !== "error") {
-        $("#titulo_genero").html(tituloGenero);
+        $("#titulo_genero").html(tituloGenero + " <span id='cantidad_genero'> </span>");
         filtro = 'autor';
         cargarPorGenero(0);
         crearPaginador();
@@ -49,6 +49,7 @@ $(document).ready(function() {
     }
     navegacionPaginador();
     filtroPartituras();
+    actualizarContadorDescargas();
 });
 
 function crearPaginador() {
@@ -68,7 +69,7 @@ function crearPaginador() {
             var vectorPaginador = datos.split("%");
             totalPartituras = vectorPaginador[1];
             totalPaginas = vectorPaginador[0];
-            $("#titulo_genero").append(' ' + totalPartituras);
+            $("#cantidad_genero").html(totalPartituras);
             if (totalPartituras < 25) {
                 banderaPaginador = 1;
                 totalPag = Math.ceil(totalPartituras / 5);
@@ -149,7 +150,6 @@ function cargarPorGenero(Limite) {
                 var puntos_negativos = item.PuntosNegativos;
                 var Donador = item.Donador;
                 fechaPublicacion = fechaPublicacion[0];
-                //console.log(id+" "+link+" "+titulo+" "+autor);
 
                 var div = $("<div class='span10 well well-large' >" +
                         "<div class='span10 well-small'>" +
@@ -162,12 +162,12 @@ function cargarPorGenero(Limite) {
                         "<h6 class='media-heading'><strong>" + autor + "</strong></h6>" +
                         "Partitura publicada el <strong>" + fechaPublicacion + "</strong><br>" +
                         "Enviada por <strong>" + Donador + "</strong><br>" +
-                        "<a href='" + link + "' target='_blank'><i class='icon-download-alt'></i> Descargar</a>" +
+                        "<a href='" + link + "' class='contadorDescargas' id='" + id + "' target='_blank'><i class='icon-download-alt'></i> Descargar</a>" +
                         "</div>" +
                         "</div>" +
                         " <div class='span3'>" +
                         "<h5 class='media-heading' style='margin-left: 40px;'>Estad&iacute;sticas</h5>" +
-                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>" + contadorDescargas + "</strong><i class='icon-tasks'></i> Descargas<br>" +
+                        "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong id='contDescargas_" + id + "'>" + contadorDescargas + "</strong><i class='icon-tasks'></i> Descargas<br>" +
                         "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>" + puntos_positivos + "</strong><i class='icon-thumbs-up'></i> Positivos<br>" +
                         "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<strong>" + puntos_negativos + "</strong><i class='icon-thumbs-down'></i>  Negativos" +
                         "</div>" +
@@ -221,7 +221,6 @@ function navegacionPaginador() {
     $(document).on('click', '.anterior', function()
     {
         var multiplo = $(this).attr('pos') % 5;
-//        alert('este es el resultado de multiplo: '+multiplo);
         $("#pagina_" + $(this).attr('pos')).click();
         if (multiplo === 0) {
 
@@ -229,7 +228,6 @@ function navegacionPaginador() {
             inferior = parseInt($(this).attr('pos')) - 3;
             if (inferior === 0)
                 inferior = 1;
-//            alert('voy a activar paginas con superior: '+superior+ ' inferior: '+inferior);
             activarPaginas();
         }
 
@@ -239,12 +237,9 @@ function navegacionPaginador() {
     $(document).on('click', '.siguiente', function()
     {
         var multiplo = (parseInt($(this).attr('pos')) - 1) % 5;
-//        alert('este es el resultado de multiplo: '+multiplo);
         if (multiplo === 0) {
-
             superior = parseInt($(this).attr('pos')) + 4;
             inferior = parseInt($(this).attr('pos'));
-//            alert('voy a activar paginas con superior: '+superior+ ' inferior: '+inferior);
             activarPaginas();
         }
         $("#pagina_" + $(this).attr('pos')).click();
@@ -280,28 +275,21 @@ function filtroPartituras() {
                 $("#busquedaFiltros").hide();
             }
             if (filtro === 'activar_busqueda_filtros') {
+                $("#palabra_buscar").val('');
+                palabra = '';
+                filtro = 'autor';
+                inferior = 1;
+                superior = 5;
+                banderaPaginador = 0;
                 $("#busquedaFiltros").show();
                 $("#busquedaEspecifica").hide();
+                cargarPorGenero(0);
+                crearPaginador();
             }
 
         } else {
             cargarPorGenero(0);
             crearPaginador();
-        }
-    });
-
-
-    $(".filtroEspecifico").click(function() {
-        var pal = $("#palabra_buscar").val();
-
-        if (pal !== '') {
-            palabra = pal;
-            criterio = $(this).attr('valor');
-            $('#paginadorPartituras').html('');
-            cargarPorGenero(0);
-            crearPaginador();
-        } else {
-            $("#palabra_buscar").focus();
         }
     });
 
@@ -314,12 +302,29 @@ function filtroPartituras() {
                 $('#paginadorPartituras').html('');
                 cargarPorGenero(0);
                 crearPaginador();
-                palabra = '';
             } else {
                 $("#palabra_buscar").focus();
             }
         }
 
     });
+}
 
+function actualizarContadorDescargas() {
+    $(document).on('click', '.contadorDescargas', function()
+    {
+        var idFila = $(this).attr('id');
+        var idContador=$(this).attr('id');
+        var id=idContador.charAt(idContador.length-1);
+        $.ajax({
+            type: 'POST',
+            url: '../funciones/funciones.php',
+            data: "funcion=actualizarContadorDescargas&id=" + idFila,
+            success: function(data) {
+                $("#contDescargas_" + idFila).html('');
+                $("#contDescargas_" + idFila).html(data);
+            }
+        });
+    }
+    );
 }

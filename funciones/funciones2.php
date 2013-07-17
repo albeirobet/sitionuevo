@@ -1,7 +1,20 @@
 <?php
 
-require_once('geoplugin.class.php');
 require_once './conexionPDO.php';
+include './geoplugin.class.php';
+
+//$arreglo = obtenerElementos('partituras_subidas');
+//foreach ($arreglo as $row) {
+//    echo 'imprimiendo desde la clase: '.$row["id"];
+//}
+//$arreglo = getElementosEspecificos('partituras_subidas', 'id', '49', 'int');
+//var_dump($arreglo);
+////foreach ($arreglo as $row) {
+////    echo 'imprimiendo desde la clase getElementosEspecificos: '.$row["autor"];
+////}
+//$cantidad =getCantidadRegistros('partituras_subidas');
+//echo $cantidad;
+//echo getCantidadRegistros('partituras_subidas');
 
 $metodo = $_POST['funcion'];
 if ($metodo == "cargarGeneros" || $metodo == "cargarPorGenero") {
@@ -25,7 +38,7 @@ function ObtenerDatosGeolocalizacion() {
 function getCantidadPartituras() {
     $cantidad = getCantidadRegistros('partituras_subidas');
     $arr = array('Cantidad' => $cantidad);
-    echo '[' . json_encode($arr) . ']';
+    echo '' . json_encode($arr) . '';
 }
 
 function cargarRecientes() {
@@ -39,328 +52,293 @@ function cargarRecientes() {
                     'Link' => $row['link_descarga']);
         $contador++;
     }
+     echo '' . json_encode($arr) . '';
+}
+
+function cargarGeneros($genero) {
+    include 'conectar.php';
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  '$genero' ORDER BY id DESC LIMIT 10";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
     echo '' . json_encode($arr) . '';
 }
 
-function topDescargas() {
-    $arreglo = getElementosPorLimiteTabla('partituras_subidas', 'contador_descargas', 'DESC', '0 , 4');
+function cargarPorGenero($genero) {
+    include 'conectar.php';
+    $limite = $_POST['limite'];
+    $filtro = $_POST['filtro'];
+    $palabra = $_POST['palabra'];
+    $busquedaEspecifica = '';
+    if ($palabra != '') {
+        $busquedaEspecifica = "AND titulo LIKE  '%$palabra%' OR autor LIKE  '%$palabra%'";
+        $filtro = 'titulo';
+    }
+    $fil = '';
+    $fil = 'ASC';
+    if ($filtro == 'puntos_positivos' || $filtro == 'puntos_negativos' || $filtro == 'contador_descargas')
+        $fil = "DESC";
+    if ($filtro == 'fecha_publicacion') {
+        $filtro = 'id';
+        $fil = "DESC";
+    }
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =   '$genero' $busquedaEspecifica  ORDER BY $filtro $fil  LIMIT $limite, 5";
+    $result = mysql_query($sqlConsultar, $conexion);
     $contador = 0;
-    foreach ($arreglo as $row) {
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] = array('Titulo' => $row['titulo'],
+            'Autor' => $row['autor'],
+            'Id' => $row['id'],
+            'Link' => $row['link_descarga'],
+            'Fecha' => $row['fecha_publicacion'],
+            'PuntosPositivos' => $row['puntos_positivos'],
+            'PuntosNegativos' => $row['puntos_negativos'],
+            'Donador' => $row['donada_por'],
+            'Contador' => $row['contador_descargas']);
+        $contador++;
+    }
+    include 'desconectar.php';
+    array_push($arr);
+    echo '' . json_encode($arr) . '';
+}
+
+function contadorPartiturasPorGenero() {
+    include 'conectar.php';
+    $genero = $_POST['genero'];
+    $palabra = $_POST['palabra'];
+    $busquedaEspecifica = '';
+    if ($palabra != '') {
+        $busquedaEspecifica = "AND titulo LIKE  '%$palabra%' OR autor LIKE  '%$palabra%'";
+    }
+    $sqlConsultar = "SELECT count(id) Contador FROM partituras_subidas WHERE genero = '$genero' $busquedaEspecifica ORDER BY autor ASC";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $total;
+    while ($row = @mysql_fetch_array($result)) {
+        $total = $row['Contador'];
+    }
+    $totalPaginas = ceil($total / 5);
+    echo $totalPaginas . "%" . $total;
+    include 'desconectar.php';
+}
+
+//SE PUEDE BORRAR CUANDO SUBA SITIO NUEVO
+function cargarGeneroSalsa() {
+    include 'conectar.php';
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Salsa'ORDER BY id DESC LIMIT 10";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+function cargarGeneroMerengue() {
+    include 'conectar.php';
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Merengue' ORDER BY id DESC LIMIT 10";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+function cargarGeneroVariado() {
+    include 'conectar.php';
+    $sqlConsultar = "SELECT * FROM  `partituras_subidas` WHERE genero <>  'Salsa' AND genero <>  'Merengue' ORDER BY id DESC LIMIT 10";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+//FIN SE PUEDE BORRAR CUANDO SUBA SITIO NUEVO
+
+
+function cargarTodasSalsa() {
+    include 'conectar.php';
+    $sqlConsultar1 = "SELECT genero, COUNT( * ) AS contador FROM partituras_subidas WHERE genero =  'Salsa' GROUP BY genero";
+    $resultado = mysql_query($sqlConsultar1, $conexion);
+
+    $temporal;
+    while ($row = @mysql_fetch_array($resultado)) {
+        $temporal = $row['contador'];
+    }
+    $vaciarTablaTemporal = "DELETE FROM temporal_salsa";
+    mysql_query($vaciarTablaTemporal, $conexion);
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Salsa' ORDER BY autor ASC ";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
         $arr[$contador] =
                 array('Titulo' => $row['titulo'],
                     'Autor' => $row['autor'],
                     'Id' => $row['id'],
                     'Link' => $row['link_descarga'],
-                    'Contador' => $row['contador_descargas']);
+                    'Cantidad' => $temporal);
+        $contador++;
+        $id = $row['id'];
+        $genero = $row['genero'];
+        $titulo = $row['titulo'];
+        $autor = $row['autor'];
+        $link_descarga = $row['link_descarga'];
+        $insercionTemporal = "INSERT INTO temporal_salsa (id, genero, titulo, autor, link_descarga) values($id,'$genero','$titulo', '$autor', '$link_descarga')";
+        mysql_query($insercionTemporal, $conexion);
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+function cargarTodasMerengue() {
+    include 'conectar.php';
+    $sqlConsultar1 = "SELECT genero, COUNT( * ) AS contador FROM partituras_subidas WHERE genero =  'Merengue' GROUP BY genero";
+    $resultado = mysql_query($sqlConsultar1, $conexion);
+    echo $resultado['Salsa'];
+    $temporal;
+    while ($row = @mysql_fetch_array($resultado)) {
+        $temporal = $row['contador'];
+    }
+    $vaciarTablaTemporal = "DELETE FROM temporal_merengue";
+    mysql_query($vaciarTablaTemporal, $conexion);
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Merengue' ORDER BY autor ASC ";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga'],
+                    'Cantidad' => $temporal);
+        $contador++;
+        $id = $row['id'];
+        $genero = $row['genero'];
+        $titulo = $row['titulo'];
+        $autor = $row['autor'];
+        $link_descarga = $row['link_descarga'];
+        $insercionTemporal = "INSERT INTO temporal_merengue (id, genero, titulo, autor, link_descarga) values($id,'$genero','$titulo', '$autor', '$link_descarga')";
+        mysql_query($insercionTemporal, $conexion);
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+function cargarTodasVarios() {
+    include 'conectar.php';
+    $sqlConsultar1 = "SELECT genero, COUNT( * ) AS contador FROM partituras_subidas WHERE genero <>  'Salsa' AND genero <>  'Merengue'";
+    $resultado = mysql_query($sqlConsultar1, $conexion);
+
+    $temporal;
+    while ($row = @mysql_fetch_array($resultado)) {
+        $temporal = $row['contador'];
+    }
+    $vaciarTablaTemporal = "DELETE FROM temporal_varios";
+    mysql_query($vaciarTablaTemporal, $conexion);
+    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero <>  'Salsa' AND genero <>  'Merengue'  ORDER BY autor ASC ";
+    $result = mysql_query($sqlConsultar, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga'],
+                    'Cantidad' => $temporal);
+        $contador++;
+        $id = $row['id'];
+        $genero = $row['genero'];
+        $titulo = $row['titulo'];
+        $autor = $row['autor'];
+        $link_descarga = $row['link_descarga'];
+        $insercionTemporal = "INSERT INTO temporal_varios (id, genero, titulo, autor, link_descarga) values($id,'$genero','$titulo', '$autor', '$link_descarga')";
+        mysql_query($insercionTemporal, $conexion);
+    }
+    include 'desconectar.php';
+    echo '' . json_encode($arr) . '';
+}
+
+function buscarDatosTablaSalsa() {
+    $buscando = $_POST['buscando'];
+    include 'conectar.php';
+    $sql = "SELECT * FROM  `temporal_salsa` WHERE titulo LIKE  '%$buscando%' OR autor LIKE  '%$buscando%' ORDER BY autor ASC";
+    $result = mysql_query($sql, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
         $contador++;
     }
+    include 'desconectar.php';
     echo '' . json_encode($arr) . '';
 }
 
-function cargarGeneros($genero) {
-    if ($genero) {
-        $arreglo = getElementosEspecificosPorLimite('partituras_subidas', 'genero', $genero, 'string', 'ORDER BY id DESC LIMIT 10');
-        $contador = 0;
-        foreach ($arreglo as $row) {
-            $arr[$contador] =
-                    array('Titulo' => $row['titulo'],
-                        'Autor' => $row['autor'],
-                        'Id' => $row['id'],
-                        'Link' => $row['link_descarga']);
-            $contador++;
-        }
-        echo '' . json_encode($arr) . '';
+function buscarDatosTablaMerengue() {
+    $buscando = $_POST['buscando'];
+    include 'conectar.php';
+    $sql = "SELECT * FROM  `temporal_merengue` WHERE titulo LIKE  '%$buscando%' OR autor LIKE  '%$buscando%' ORDER BY autor ASC";
+    $result = mysql_query($sql, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
     }
-}
-
-function cargarPorGenero($genero) {
-    if ($genero) {
-        $limite = $_POST['limite'];
-        $filtro = $_POST['filtro'];
-        $palabra = $_POST['palabra'];
-        $arreglo = getPartiturasPorGenero('partituras_subidas', $genero, $limite, $filtro, $palabra);
-        $contador = 0;
-        foreach ($arreglo as $row) {
-            $arr[$contador] = array('Titulo' => $row['titulo'],
-                'Autor' => $row['autor'],
-                'Id' => $row['id'],
-                'Link' => $row['link_descarga'],
-                'Fecha' => $row['fecha_publicacion'],
-                'PuntosPositivos' => $row['puntos_positivos'],
-                'PuntosNegativos' => $row['puntos_negativos'],
-                'Donador' => $row['donada_por'],
-                'Contador' => $row['contador_descargas']);
-            $contador++;
-        }
-        echo '' . json_encode($arr) . '';
-    }
-}
-
-function contadorPartiturasPorGenero() {
-    $genero = $_POST['genero'];
-    if ($genero) {
-        $palabra = $_POST['palabra'];
-        $total = getCantidadPartiturasPorGenero('partituras_subidas', $genero, $palabra);
-        $totalPaginas = ceil($total / 5);
-        echo $totalPaginas . "%" . $total;
-        include 'desconectar.php';
-    }
-}
-
-function actualizarContadorDescargas() {
-    $id = $_POST['id'];
-    if ($id) {
-        $contador = updateContadorDescargasPartitura('partituras_subidas', 'contador_descargas', $id);
-        echo $contador;
-    }
-}
-
-function loginUsuarios() {
-    $username = $_POST["username_login"];
-    $password = $_POST["password_login"];
-    $arr[0] = array('estado' => '0');
-    if (!empty($username) && !empty($password)) {
-        $arreglo = loginUsers('tbl_users', 'user', $username, 'pass', $password);
-        if (!$arreglo == false) {
-            foreach ($arreglo as $fila) {
-                $tipoUsuario = $fila['tipo_usuario'];
-                $email = $fila['email'];
-            }
-            session_start();
-            $_SESSION["Nombre_Usuario"] = $username;
-            $_SESSION["Correo_Usuario"] = $email;
-            $_SESSION["Tipo_Usuario"] =$tipoUsuario;
-            $datosLocalizacion = ObtenerDatosGeolocalizacion();
-            $ip = $datosLocalizacion['ip'];
-            $ciudad = $datosLocalizacion['ciudad'];
-            $region = $datosLocalizacion['region'];
-            $pais = $datosLocalizacion['pais'];
-            updateDatosLocalizacionUsuario('tbl_users', $ip, $ciudad, $region, $pais, $username);
-            $arr[0] = array('estado' => '2');
-        } else {
-            $arr[0] = array('estado' => '0');
-        }
-    }
+    include 'desconectar.php';
     echo '' . json_encode($arr) . '';
 }
 
-function cerrarSesion() {
-    session_start();
-    session_destroy() or die("Error");
-    $arr[0] = array('estado' => 'No');
+function buscarDatosTablaVarios() {
+    $buscando = $_POST['buscando'];
+    include 'conectar.php';
+    $sql = "SELECT * FROM  `temporal_varios` WHERE titulo LIKE  '%$buscando%' OR autor LIKE  '%$buscando%' ORDER BY autor ASC";
+    $result = mysql_query($sql, $conexion);
+    $contador = 0;
+    while ($row = @mysql_fetch_array($result)) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga']);
+        $contador++;
+    }
+    include 'desconectar.php';
     echo '' . json_encode($arr) . '';
 }
-
-////SE PUEDE BORRAR CUANDO SUBA SITIO NUEVO
-//function cargarGeneroSalsa() {
-//    include 'conectar.php';
-//    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Salsa'ORDER BY id DESC LIMIT 10";
-//    $result = mysql_query($sqlConsultar, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga']);
-//        $contador++;
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-//function cargarGeneroMerengue() {
-//    include 'conectar.php';
-//    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Merengue' ORDER BY id DESC LIMIT 10";
-//    $result = mysql_query($sqlConsultar, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga']);
-//        $contador++;
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-//function cargarGeneroVariado() {
-//    include 'conectar.php';
-//    $sqlConsultar = "SELECT * FROM  `partituras_subidas` WHERE genero <>  'Salsa' AND genero <>  'Merengue' ORDER BY id DESC LIMIT 10";
-//    $result = mysql_query($sqlConsultar, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga']);
-//        $contador++;
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-////FIN SE PUEDE BORRAR CUANDO SUBA SITIO NUEVO
-//
-//
-//function cargarTodasSalsa() {
-//    include 'conectar.php';
-//    $sqlConsultar1 = "SELECT genero, COUNT( * ) AS contador FROM partituras_subidas WHERE genero =  'Salsa' GROUP BY genero";
-//    $resultado = mysql_query($sqlConsultar1, $conexion);
-//
-//    $temporal;
-//    while ($row = @mysql_fetch_array($resultado)) {
-//        $temporal = $row['contador'];
-//    }
-//    $vaciarTablaTemporal = "DELETE FROM temporal_salsa";
-//    mysql_query($vaciarTablaTemporal, $conexion);
-//    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Salsa' ORDER BY autor ASC ";
-//    $result = mysql_query($sqlConsultar, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga'],
-//                    'Cantidad' => $temporal);
-//        $contador++;
-//        $id = $row['id'];
-//        $genero = $row['genero'];
-//        $titulo = $row['titulo'];
-//        $autor = $row['autor'];
-//        $link_descarga = $row['link_descarga'];
-//        $insercionTemporal = "INSERT INTO temporal_salsa (id, genero, titulo, autor, link_descarga) values($id,'$genero','$titulo', '$autor', '$link_descarga')";
-//        mysql_query($insercionTemporal, $conexion);
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-//function cargarTodasMerengue() {
-//    include 'conectar.php';
-//    $sqlConsultar1 = "SELECT genero, COUNT( * ) AS contador FROM partituras_subidas WHERE genero =  'Merengue' GROUP BY genero";
-//    $resultado = mysql_query($sqlConsultar1, $conexion);
-//    echo $resultado['Salsa'];
-//    $temporal;
-//    while ($row = @mysql_fetch_array($resultado)) {
-//        $temporal = $row['contador'];
-//    }
-//    $vaciarTablaTemporal = "DELETE FROM temporal_merengue";
-//    mysql_query($vaciarTablaTemporal, $conexion);
-//    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero =  'Merengue' ORDER BY autor ASC ";
-//    $result = mysql_query($sqlConsultar, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga'],
-//                    'Cantidad' => $temporal);
-//        $contador++;
-//        $id = $row['id'];
-//        $genero = $row['genero'];
-//        $titulo = $row['titulo'];
-//        $autor = $row['autor'];
-//        $link_descarga = $row['link_descarga'];
-//        $insercionTemporal = "INSERT INTO temporal_merengue (id, genero, titulo, autor, link_descarga) values($id,'$genero','$titulo', '$autor', '$link_descarga')";
-//        mysql_query($insercionTemporal, $conexion);
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-//function cargarTodasVarios() {
-//    include 'conectar.php';
-//    $sqlConsultar1 = "SELECT genero, COUNT( * ) AS contador FROM partituras_subidas WHERE genero <>  'Salsa' AND genero <>  'Merengue'";
-//    $resultado = mysql_query($sqlConsultar1, $conexion);
-//
-//    $temporal;
-//    while ($row = @mysql_fetch_array($resultado)) {
-//        $temporal = $row['contador'];
-//    }
-//    $vaciarTablaTemporal = "DELETE FROM temporal_varios";
-//    mysql_query($vaciarTablaTemporal, $conexion);
-//    $sqlConsultar = "SELECT * FROM partituras_subidas WHERE genero <>  'Salsa' AND genero <>  'Merengue'  ORDER BY autor ASC ";
-//    $result = mysql_query($sqlConsultar, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga'],
-//                    'Cantidad' => $temporal);
-//        $contador++;
-//        $id = $row['id'];
-//        $genero = $row['genero'];
-//        $titulo = $row['titulo'];
-//        $autor = $row['autor'];
-//        $link_descarga = $row['link_descarga'];
-//        $insercionTemporal = "INSERT INTO temporal_varios (id, genero, titulo, autor, link_descarga) values($id,'$genero','$titulo', '$autor', '$link_descarga')";
-//        mysql_query($insercionTemporal, $conexion);
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-//function buscarDatosTablaSalsa() {
-//    $buscando = $_POST['buscando'];
-//    include 'conectar.php';
-//    $sql = "SELECT * FROM  `temporal_salsa` WHERE titulo LIKE  '%$buscando%' OR autor LIKE  '%$buscando%' ORDER BY autor ASC";
-//    $result = mysql_query($sql, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga']);
-//        $contador++;
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-//function buscarDatosTablaMerengue() {
-//    $buscando = $_POST['buscando'];
-//    include 'conectar.php';
-//    $sql = "SELECT * FROM  `temporal_merengue` WHERE titulo LIKE  '%$buscando%' OR autor LIKE  '%$buscando%' ORDER BY autor ASC";
-//    $result = mysql_query($sql, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga']);
-//        $contador++;
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
-//
-//function buscarDatosTablaVarios() {
-//    $buscando = $_POST['buscando'];
-//    include 'conectar.php';
-//    $sql = "SELECT * FROM  `temporal_varios` WHERE titulo LIKE  '%$buscando%' OR autor LIKE  '%$buscando%' ORDER BY autor ASC";
-//    $result = mysql_query($sql, $conexion);
-//    $contador = 0;
-//    while ($row = @mysql_fetch_array($result)) {
-//        $arr[$contador] =
-//                array('Titulo' => $row['titulo'],
-//                    'Autor' => $row['autor'],
-//                    'Id' => $row['id'],
-//                    'Link' => $row['link_descarga']);
-//        $contador++;
-//    }
-//    include 'desconectar.php';
-//    echo '' . json_encode($arr) . '';
-//}
 
 /*
  * Zona de Administracion
@@ -425,6 +403,25 @@ function actualizarTablaPartituras() {
         $link = $_POST['link'];
         $sql = "update partituras_subidas set genero='$genero',titulo='$titulo', autor ='$autor', link_descarga='$link' where id='$id'";
         mysql_query($sql, $conexion);
+        include 'desconectar.php';
+    }
+}
+
+function actualizarContadorDescargas() {
+    if ($_POST['id']) {
+        include 'conectar.php';
+        $id = $_POST['id'];
+        $sql = "update partituras_subidas set contador_descargas=contador_descargas+1 where id=$id";
+        mysql_query($sql, $conexion);
+
+        $sqlConsultar = "SELECT contador_descargas  from partituras_subidas where id=$id";
+        $result = mysql_query($sqlConsultar, $conexion);
+        $contador = 0;
+        while ($row = @mysql_fetch_array($result)) {
+            $contador = $row['contador_descargas'];
+        }
+        echo $contador;
+
         include 'desconectar.php';
     }
 }
@@ -643,6 +640,37 @@ function respuestaComentario() {
     include 'desconectar.php';
 }
 
+function topDescargas() {
+//    include 'conectar.php';
+//    $sqlConsultar = "SELECT *  FROM  partituras_subidas  ORDER BY  contador_descargas DESC  LIMIT 0 , 10";
+//    $result = mysql_query($sqlConsultar, $conexion);
+//    $contador = 0;
+//    while ($row = @mysql_fetch_array($result)) {
+//        $arr[$contador] = array(
+//            'Id' => $row['id'],
+//            'Titulo' => $row['titulo'],
+//            'Autor' => $row['autor'],
+//            'Link' => $row['link_descarga'],
+//            'Contador' => $row['contador_descargas']);
+//        $contador++;
+//    }
+//
+//    echo '' . json_encode($arr) . '';
+//    include 'desconectar.php';
+    $arreglo = getElementosPorLimiteTabla('partituras_subidas', 'contador_descargas', 'DESC', '0 , 4');
+    $contador = 0;
+    foreach ($arreglo as $row) {
+        $arr[$contador] =
+                array('Titulo' => $row['titulo'],
+                    'Autor' => $row['autor'],
+                    'Id' => $row['id'],
+                    'Link' => $row['link_descarga'],
+                    'Contador' => $row['contador_descargas']);
+        $contador++;
+    }
+     echo '' . json_encode($arr) . '';
+}
+
 function registroUsuarios() {
     include 'conectar.php';
     $user = $_POST['username'];
@@ -697,6 +725,68 @@ function registroUsuarios() {
     include 'desconectar.php';
 }
 
+function loginUsuarios() {
+    include 'conectar.php';
+    $tipo_usuario = $_POST["username_login"];
+    if (!empty($_POST["username_login"]) && !empty($_POST["password_login"])) {
+        $tipo_separado = explode("#", $tipo_usuario);
+        $tipo_final = end($tipo_separado);
+        $nombre_Usuario = $tipo_separado[0];
+        $arr[0] = array('estado' => '0');
+        if ($tipo_final == 'administrador') {
+            $sqlConsultar = "SELECT * FROM tbl_users where tipo_usuario='Administrador'";
+            $result = mysql_query($sqlConsultar, $conexion);
+            while ($row = @mysql_fetch_array($result)) {
+                if ($row['user'] == $nombre_Usuario && $row['pass'] == $_POST["password_login"]) {
+                    session_start();
+                    $_SESSION["Administrador"] = "Si";
+                    $_SESSION["Usuario"] = "No";
+                    $_SESSION["Nombre_Usuario"] = $nombre_Usuario;
+                    $_SESSION["Correo_Usuario"] = $row['email'];
+                    $_SESSION["Tipo_Usuario"] = $row['tipo_usuario'];
+                    $arr[0] = array('estado' => '2');
+                    $datosLocalizacion = ObtenerDatosGeolocalizacion();
+                    $ip = $datosLocalizacion['ip'];
+                    $ciudad = $datosLocalizacion['ciudad'];
+                    $region = $datosLocalizacion['region'];
+                    $pais = $datosLocalizacion['pais'];
+                    $sql = "update tbl_users set ip = '$ip', ciudad = '$ciudad', region = '$region', pais = '$pais' where user='$nombre_Usuario'";
+                    mysql_query($sql, $conexion);
+                    break;
+                }
+            }
+        } else {
+            $sqlConsultar1 = "SELECT * FROM tbl_users where tipo_usuario='Usuario'";
+            $result1 = mysql_query($sqlConsultar1, $conexion);
+            while ($row1 = @mysql_fetch_array($result1)) {
+                if ($row1['user'] == $_POST["username_login"] && $row1['pass'] == $_POST["password_login"]) {
+                    session_start();
+                    $_SESSION["Usuario"] = "Si";
+                    $_SESSION["Administrador"] = "No";
+                    $_SESSION["Nombre_Usuario"] = $_POST['username_login'];
+                    $_SESSION["Correo_Usuario"] = $row1['email'];
+                    $_SESSION["Tipo_Usuario"] = $row1['tipo_usuario'];
+                    $arr[0] = array('estado' => '1');
+                    $datosLocalizacion = ObtenerDatosGeolocalizacion();
+                    $ip = $datosLocalizacion['ip'];
+                    $ciudad = $datosLocalizacion['ciudad'];
+                    $region = $datosLocalizacion['region'];
+                    $pais = $datosLocalizacion['pais'];
+                    $sql = "update tbl_users set ip = '$ip', ciudad = '$ciudad', region = '$region', pais = '$pais' where user='$nombre_Usuario'";
+                    mysql_query($sql, $conexion);
+                    break;
+                }
+            }
+        }
+    } else {
+        $arr[0] = array('estado' => '0');
+    }
+
+
+    echo '' . json_encode($arr) . '';
+    include 'desconectar.php';
+}
+
 function recuperarDatos() {
     include 'conectar.php';
     $email = $_POST['email_recovery'];
@@ -735,6 +825,12 @@ function recuperarDatos() {
     include 'desconectar.php';
 }
 
-
-
+function cerrarSesion() {
+    session_start();
+    //unset( $_SESSION["carro"] );  para eliminar una sesion en especifico
+    //$_SESSION["carro"] = "";  para dejarla en blanco 
+    session_destroy() or die("Error");
+    $arr[0] = array('estado' => 'No');
+    echo '' . json_encode($arr) . '';
+}
 ?>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
+if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
     $nombreUsuario = $_SESSION["Nombre_Usuario"];
     // include '../funciones/evitarCache.php';
     ?> 
@@ -50,8 +50,18 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
                                     <a href="../index.php">
                                         <i id="activo_inicio" class="icon-home"></i> Inicio </a>
                                 </li>
-                                <li class="active activo_partituras">
-                                    <a href="#"><i  id="activo_partituras" class="icon-music"></i> Partituras</a>
+                                <li class="active dropdown activo_partituras">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i  id="activo_partituras" class="icon-music"></i> Partituras <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="partituras.php">Todas</a></li>
+                                        <li class="divider"></li>
+                                        <li class="nav-header">Generos</li>
+                                        <li><a href="partiturasGenero.php?g=s">Salsa</a></li>
+                                        <li><a href="partiturasGenero.php?g=m">Merengue</a></li>
+                                        <li><a href="partiturasGenero.php?g=c">Cumbia</a></li>
+                                        <li><a href="partiturasGenero.php?g=mx">Mexicana</a></li>
+                                        <li><a href="partiturasGenero.php?g=v">Varios</a></li>
+                                    </ul>
                                 </li>
                                 <li class="activo_quienes_somos">
                                     <a href="quiensomos.php"><i id="activo_quienes_somos" class="icon-question-sign"></i> &#191;Quienes Somos?</a>
@@ -61,17 +71,37 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
                                 </li>           
 
 
-                                <li>
-                                    <div class="btn-group">
-                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <span class="caret"></span></button>
+                                <?php
+                                session_start();
+                                if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
+                                    $nombreUsuario = $_SESSION["Nombre_Usuario"];
+                                    ?>
+                                    <li class="active dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="#"><i class="icon-share"></i> Donar Partitura</a></li>
                                             <li><a href="#"><i class="icon-edit"></i> Editar Perfil</a></li>
-                                            <li class="divider"></li>
-                                            <li><a style="cursor: pointer;" onclick="cerrarSesionResto()"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a></li>
+                                            <li><a style="cursor: pointer;" onclick="cerrarSesionIndex()"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a></li>
+                                            <?php
+                                            if ($_SESSION['Tipo_Usuario'] == 'Administrador') {
+                                                ?>  
+                                                <li class="divider"></li>
+                                                <li class="nav-header">Administradores</li>
+                                                <li><a href="#"><i class="icon-wrench"></i> Gestionar Web</a></li>
+                                                <?php
+                                            }
+                                            ?> 
                                         </ul>
-                                    </div>
-                                </li>
+                                    </li>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <li class="activo_login_registro">
+                                        <a id="abrir_modal" href="#modal_login_registro"  data-toggle="modal"><i id="activo_login_registro" class="icon-plus-sign"></i> Log In / Registro</a>
+                                    </li> 
+                                    <?php
+                                }
+                                ?>
 
 
                             </ul>
@@ -128,13 +158,13 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" style="font-size: 11px; cursor: pointer">
-<!--                                <li><a class="filtroEspecifico" valor="titulo">T&iacute;tulo Partitura</a></li>
-                                <li><a class="filtroEspecifico" valor="autor">Nombre Artista</a></li>
-                                <li class="divider"></li>-->
+                                <!--                                <li><a class="filtroEspecifico" valor="titulo">T&iacute;tulo Partitura</a></li>
+                                                                <li><a class="filtroEspecifico" valor="autor">Nombre Artista</a></li>
+                                                                <li class="divider"></li>-->
                                 <li><a class="afiltro" valor="activar_busqueda_filtros"><strong>Activar Filtros</strong></a></li>
                             </ul>
                         </div>
-                        <input id="palabra_buscar"  required="required" type="text" style="height: 12px;" placeholder="Artista &oacute; Partitura">
+                        <input id="palabra_buscar"  required="required" type="text" style="height: 12px;" placeholder="Buscar por Artista &oacute; Partitura">
                     </div>
 
                     <br><br>
@@ -191,7 +221,13 @@ if ($_SESSION["Administrador"] == "Si" || $_SESSION["Usuario"] == "Si") {
             <script src="../js/cargasDinamicas/cerrarSesion.js"></script>
             <script src="../js/script_menu_activos.js"></script>
             <script src="../js/cargasDinamicas/cargasPorGenero.js"></script>
-            <!--Fin Carga de Scripts-->        
+            <!--Fin Carga de Scripts-->  
+            <div id="ajaxModal" class="modal hide fade" tabindex="-1" data-keyboard="false" data-backdrop="static" style="height: 35px;">
+                <div class="progress progress-striped active">
+                    <div class="bar" style="width: 100%;"></div>
+                </div>
+                <p class="text-center" style="margin-top: -23px">Espere por favor.</p>
+            </div>
         </body>
     </html>
     <?php
