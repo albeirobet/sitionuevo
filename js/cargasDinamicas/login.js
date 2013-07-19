@@ -1,5 +1,5 @@
 // Login Form
-
+var correoRegistro ='';
 $(document).ready(function() {
 
     $('#formularioLogin').submit(function() {
@@ -96,8 +96,16 @@ $(document).ready(function() {
                     var dataJson = eval(data);
                     var estado = dataJson[0].estado;
                     if (estado == '1') {
-                        cuentaRegresiva();
+                        activarObjetoAjax(0);
+                        correoRegistro = $("#email_register").val();
+                        $("#formularioIngreso").css("display", "none");
+                        $("#titulo_iniciar_sesion").css("display", "none");
+                        $("#confirmarCuenta").css('display', 'block');
+                        $("#titulo_confirmar_cuenta").css("display", "block");
+                        $("#cuentaCorreo").val(correoRegistro);
+
                     } else {
+                        activarObjetoAjax(0);
                         $('#informacionRegistro').html("El nombre de usuario o email ya estan en uso.");
                         $('#informacionRegistro').css('color', 'Red');
                         $('#username').val('');
@@ -141,7 +149,7 @@ $(function() {
 var tiempo = 6;
 function cuentaRegresiva() {
     if (tiempo > 0) {
-        tiempo--
+        tiempo--;
     }
     else {
         window.location = 'paginas/partituras.php';

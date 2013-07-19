@@ -116,6 +116,10 @@ include 'funciones/evitarCache.php';
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h3 id="myModalLabel" class="text-center">Registro Usuario Nuevo</h3>   
                 </div>
+                <div id="titulo_confirmar_cuenta" style="display: none">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h3 id="myModalLabel" class="text-center">Verificar Correo Electronico</h3>   
+                </div>
 
 
             </div>
@@ -213,12 +217,20 @@ include 'funciones/evitarCache.php';
                     <br><br>
                 </div>
 
+                <div id="confirmarCuenta" style="display: none">
+                    <p><strong>¡Hola!</strong><br><br>
+                    Hemos enviado un correo a <strong><span id="cuentaCorreo" class="text-info"></span></strong> con 
+                    las instrucciones para activar tu cuenta. Si en los pr&oacute;ximos minutos no lo encuentras en la bandeja de entrada,
+                    por favor revisa tu carpeta de <strong><span id="cuentaCorreo" class="text-info">correo no deseado</span></strong>, es posible
+                    que este ah&iacute;.<br><br>
 
+                    <strong>¡Muchas gracias!</strong>
+                    </p>
+                    <p>
+                        <a href="#">Iniciar Sesi&oacute;n</a><strong>,</strong>  <a href=""><strong>Reenviar</strong> Correo de Verificaci&oacute;n.</a>  
+                    </p>
+                </div>
             </div>
-            <!--            <div class="modal-footer">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                            <button class="btn btn-primary">Save changes</button>
-                        </div>-->
         </div>
 
 
@@ -489,7 +501,7 @@ include 'funciones/evitarCache.php';
             <div class="progress progress-striped active">
                 <div class="bar" style="width: 100%;"></div>
             </div>
-            <p class="text-center" style="margin-top: -23px">Espere por favor.</p>
+            <p class="text-center" style="margin-top: -23px">Espere por favor. </p>
         </div>
     </body>
 </html>

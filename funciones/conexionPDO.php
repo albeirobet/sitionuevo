@@ -121,7 +121,6 @@ function getElementosPorLimiteTabla($nombreTabla, $columna, $orden, $limite) {
 function loginUsers($nombreTabla, $colNombreUsuario, $username, $colPassword, $password) {
     $conn = crearConexion();
     $stmt = $conn->prepare("SELECT * FROM $nombreTabla WHERE $colNombreUsuario=:username AND $colPassword=:password");
-//    $stmt = $conn->prepare("SELECT * FROM $nombreTabla");
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->bindValue(':password', $password, PDO::PARAM_STR);
     $stmt->execute();
@@ -132,8 +131,52 @@ function loginUsers($nombreTabla, $colNombreUsuario, $username, $colPassword, $p
     } else {
         return false;
     }
-//    $arreglo = $stmt->fetchAll();
-//    return $arreglo;
+}
+
+function registerUsers($nombreTabla, $username, $email, $nombres, $password, $fechaRegistro, $ip, $ciudad, $region, $pais, $codigoverificacion) {
+    $existe = userExiste($nombreTabla, $username, $email);
+    if ($existe == 0) {
+        
+        $conn = crearConexion();
+        $stmt = $conn->prepare("INSERT INTO $nombreTabla (tipo_usuario, nombres, user, pass, email, fecha_registro, estado, codigo_verificacion, ip, ciudad, region, pais) VALUES ('Usuario', :nombres, :username, :password, :email, :fechaRegistro, 'Pendiente', :codigoVerificacion, :ip, :ciudad, :region, :pais)");
+        $stmt->bindValue(':nombres', $nombres, PDO::PARAM_STR);
+        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':password', $password, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':fechaRegistro', $fechaRegistro, PDO::PARAM_STR);
+        $stmt->bindValue(':codigoVerificacion', $codigoverificacion, PDO::PARAM_INT);
+        $stmt->bindValue(':ip', $ip, PDO::PARAM_STR);
+        $stmt->bindValue(':ciudad', $ciudad, PDO::PARAM_STR);
+        $stmt->bindValue(':region', $region, PDO::PARAM_STR);
+        $stmt->bindValue(':pais', $pais, PDO::PARAM_STR);
+        $stmt->execute();
+        $ingreso = $stmt->rowCount();
+        return $ingreso;
+    } else {
+        return $existe;
+    }
+}
+
+function userExiste($nombreTabla, $username, $email) {
+    $conn = crearConexion();
+    $stmt = $conn->prepare("SELECT count(id) as contador FROM $nombreTabla WHERE user=:username or email=:em");
+    $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+    $stmt->bindValue(':em', $email, PDO::PARAM_STR);
+    $stmt->execute();
+    $arreglo = $stmt->fetchAll();
+    foreach ($arreglo as $row) {
+        $cantidad = $row["contador"];
+    }
+    return $cantidad;
+}
+
+function confirmarCuenta($nombreTabla, $codigoVerificacion){
+    $conn = crearConexion();
+    $stmt = $conn->prepare("UPDATE $nombreTabla set  estado='Activo', codigo_verificacion=0 where codigo_verificacion=:codigoVerificacion");
+    $stmt->bindValue(':codigoVerificacion', $codigoVerificacion, PDO::PARAM_INT);
+    $stmt->execute();
+    $count = $stmt->rowCount();
+    return $count;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

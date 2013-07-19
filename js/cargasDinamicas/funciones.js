@@ -109,25 +109,27 @@ $(document).ready(function() {
         $("#recuperarDatos").css("display", "none");
         $("#titulo_registro_usuario").css("display", "none");
         $("#frmRegistroUsuario").css("display", "none");
+        $("#confirmarCuenta").css('display', 'none');
+        $("#titulo_confirmar_cuenta").css("display", "none");
         limpiaForm($("#formularioLogin"));
         limpiaForm($("#formularioRecovery"));
         limpiaForm($("#formularioRegistro"));
         $(".error-recuperar").css("display", "none");
 
     });
-    
-    $(document).on('click', '.contadorDescargas',function()
-    {  
-        var idFila=$(this).attr('id_partitura');
-        var idContador=$(this).attr('id');
-        var id=idContador.charAt(idContador.length-1);
+
+    $(document).on('click', '.contadorDescargas', function()
+    {
+        var idFila = $(this).attr('id_partitura');
+        var idContador = $(this).attr('id');
+        var id = idContador.charAt(idContador.length - 1);
         $.ajax({
             type: 'POST',
             url: 'funciones/funciones.php',
-            data: "funcion=actualizarContadorDescargas&id="+idFila,
+            data: "funcion=actualizarContadorDescargas&id=" + idFila,
             success: function(data) {
-            $("#cantidad_descargas_partitura_mas_descargada_"+id).html(''); 
-            $("#cantidad_descargas_partitura_mas_descargada_"+id).html(data);    
+                $("#cantidad_descargas_partitura_mas_descargada_" + id).html('');
+                $("#cantidad_descargas_partitura_mas_descargada_" + id).html(data);
             }
         });
     }
@@ -138,14 +140,14 @@ $(document).ready(function() {
     getPartiturasRecientes();
 });
 
-function getCantidadPartituras(){
-     $.ajax({
+function getCantidadPartituras() {
+    $.ajax({
         type: "POST",
-        url:"funciones/funciones.php",
+        url: "funciones/funciones.php",
         data: "funcion=getCantidadPartituras",
         dataType: 'text',
         beforeSend: function(data) {
-        activarObjetoAjax(1);
+            activarObjetoAjax(1);
         },
         success: function(data)
         {
@@ -153,15 +155,15 @@ function getCantidadPartituras(){
             $("#CantidadPartituras").text(dataJson[0].Cantidad);
         },
         complete: function() {
-        activarObjetoAjax(0);
+            activarObjetoAjax(0);
         }
     });
 }
 
-function getPartiturasRecientes(){
+function getPartiturasRecientes() {
     $.ajax({
         type: "POST",
-        url:"funciones/funciones.php",
+        url: "funciones/funciones.php",
         data: "funcion=cargarRecientes",
         dataType: 'text',
         beforeSend: function(data) {
@@ -171,27 +173,27 @@ function getPartiturasRecientes(){
         {
             var data = eval(data);
 //            alert(data[0].Titulo);
-           $.each(data, function(i,item)
+            $.each(data, function(i, item)
             {
-            var id=i+1;
-            $("#titulo_partitura_reciente_"+id).html(item.Titulo);
-            $("#artista_partitura_reciente_"+id).html(item.Autor);
-            $("#donante_partitura_reciente_"+id).html("Anonimo");
-            $("#pais_donante_partitura_reciente_"+id).html("Anonimo");
-            $("#link_partitura_reciente_"+id).attr("href",item.Link);
-            $("#link_partitura_reciente_"+id).attr("id_partitura",item.Id);
+                var id = i + 1;
+                $("#titulo_partitura_reciente_" + id).html(item.Titulo);
+                $("#artista_partitura_reciente_" + id).html(item.Autor);
+                $("#donante_partitura_reciente_" + id).html("Anonimo");
+                $("#pais_donante_partitura_reciente_" + id).html("Anonimo");
+                $("#link_partitura_reciente_" + id).attr("href", item.Link);
+                $("#link_partitura_reciente_" + id).attr("id_partitura", item.Id);
             });
         },
         complete: function() {
-     activarObjetoAjax(0);
+            activarObjetoAjax(0);
         }
-    }); 
+    });
 }
 
-function getPartiturasMasDescargadas(){
+function getPartiturasMasDescargadas() {
     $.ajax({
         type: "POST",
-        url:"funciones/funciones.php",
+        url: "funciones/funciones.php",
         data: "funcion=topDescargas",
         dataType: 'json',
         beforeSend: function(data) {
@@ -199,22 +201,22 @@ function getPartiturasMasDescargadas(){
         },
         success: function(data)
         {
-           $.each(data, function(i,item)
+            $.each(data, function(i, item)
             {
-            var id=i+1;
-            $("#titulo_partitura_mas_descargada_"+id).html(item.Titulo);
-            $("#artista_partitura_mas_descargada_"+id).html(item.Autor);
-            $("#donante_partitura_mas_descargada_"+id).html("Anonimo");
-            $("#pais_donante_partitura_mas_descargada_"+id).html("Anonimo");
-            $("#cantidad_descargas_partitura_mas_descargada_"+id).html(item.Contador);
-            $("#link_partitura_mas_descargada_"+id).attr("href",item.Link);
-            $("#link_partitura_mas_descargada_"+id).attr("id_partitura",item.Id);
+                var id = i + 1;
+                $("#titulo_partitura_mas_descargada_" + id).html(item.Titulo);
+                $("#artista_partitura_mas_descargada_" + id).html(item.Autor);
+                $("#donante_partitura_mas_descargada_" + id).html("Anonimo");
+                $("#pais_donante_partitura_mas_descargada_" + id).html("Anonimo");
+                $("#cantidad_descargas_partitura_mas_descargada_" + id).html(item.Contador);
+                $("#link_partitura_mas_descargada_" + id).attr("href", item.Link);
+                $("#link_partitura_mas_descargada_" + id).attr("id_partitura", item.Id);
             });
         },
         complete: function() {
             activarObjetoAjax(0);
         }
-    }); 
+    });
 }
 
 function is_email(email) {
@@ -226,9 +228,9 @@ function is_email(email) {
     }
 }
 
-function activarObjetoAjax(estado){
-    if(estado === 1)
-    $('#ajaxModal').modal({backdrop: 'static',  keyboard: false});    
-    if(estado === 0) 
-    $('#ajaxModal').modal('hide');
+function activarObjetoAjax(estado) {
+    if (estado === 1)
+        $('#ajaxModal').modal({backdrop: 'static', keyboard: false});
+    if (estado === 0)
+        $('#ajaxModal').modal('hide');
 }
