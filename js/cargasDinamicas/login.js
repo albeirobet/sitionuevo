@@ -97,12 +97,13 @@ $(document).ready(function() {
                     var estado = dataJson[0].estado;
                     if (estado == '1') {
                         activarObjetoAjax(0);
-                        correoRegistro = $("#email_register").val();
+                        $("#titulo_registro_usuario").css("display", "none");
+                        $("#frmRegistroUsuario").css("display", "none");
                         $("#formularioIngreso").css("display", "none");
                         $("#titulo_iniciar_sesion").css("display", "none");
                         $("#confirmarCuenta").css('display', 'block');
                         $("#titulo_confirmar_cuenta").css("display", "block");
-                        $("#cuentaCorreo").val(correoRegistro);
+                        $("#cuentaCorreo").html($("#email_register").val());
 
                     } else {
                         activarObjetoAjax(0);
@@ -158,7 +159,7 @@ function cuentaRegresiva() {
     $('#informacionRegistro').html("Registrado Correctamente, redireccionando en " + tiempo);
     setTimeout("cuentaRegresiva()", 1000)
 }
-var tiempo = 4;
+var tiempo = 8;
 function cuentaRegresivaRecovery() {
     if (tiempo > 0) {
         tiempo--

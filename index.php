@@ -204,8 +204,8 @@ include 'funciones/evitarCache.php';
                             <input type='email' class='email_register' value=''  id="email_register" name="email_register"  placeholder="Correo Electronico" required="required">
                         </div>
                         <div class="row-fluid">
-                            <input id="terminosCondiciones" type="checkbox">   
-                            Acepto los  <span><a href="#">Terminos y Condiciones</a></span>
+                            <input id="terminosCondiciones" type="checkbox" >   
+                            <span class="terminosCondiciones">Acepto los  <span><a href="#">Terminos y Condiciones</a></span></span>
                         </div>
                         <div>
                             <input type="submit" value="Registrarse" class="boton btn btn-primary" style="margin-top: 6px;">
@@ -227,7 +227,7 @@ include 'funciones/evitarCache.php';
                     <strong>¡Muchas gracias!</strong>
                     </p>
                     <p>
-                        <a href="#">Iniciar Sesi&oacute;n</a><strong>,</strong>  <a href=""><strong>Reenviar</strong> Correo de Verificaci&oacute;n.</a>  
+                        <a href="#" id="logindesdeConfirmarCorreo">Iniciar Sesi&oacute;n</a><strong>,</strong>  <a href=""><strong>Reenviar</strong> Correo de Verificaci&oacute;n.</a>  
                     </p>
                 </div>
             </div>

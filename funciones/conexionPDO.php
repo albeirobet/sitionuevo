@@ -120,7 +120,7 @@ function getElementosPorLimiteTabla($nombreTabla, $columna, $orden, $limite) {
 
 function loginUsers($nombreTabla, $colNombreUsuario, $username, $colPassword, $password) {
     $conn = crearConexion();
-    $stmt = $conn->prepare("SELECT * FROM $nombreTabla WHERE $colNombreUsuario=:username AND $colPassword=:password");
+    $stmt = $conn->prepare("SELECT * FROM $nombreTabla WHERE $colNombreUsuario=:username AND $colPassword=:password AND estado = 'Activo'");
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->bindValue(':password', $password, PDO::PARAM_STR);
     $stmt->execute();
@@ -177,6 +177,21 @@ function confirmarCuenta($nombreTabla, $codigoVerificacion){
     $stmt->execute();
     $count = $stmt->rowCount();
     return $count;
+}
+
+
+function recuperarDatosCuenta($nombreTabla, $email){
+  $conn = crearConexion();
+    $stmt = $conn->prepare("SELECT user, pass FROM $nombreTabla WHERE email=:email AND estado = 'Activo'");
+    $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+    $stmt->execute();
+    $count = $stmt->rowCount();
+    if ($count == 1) {
+        $arreglo = $stmt->fetchAll();
+        return $arreglo;
+    } else {
+        return false;
+    }  
 }
 
 ///////////////////////////////////////////////////////////////////////////////

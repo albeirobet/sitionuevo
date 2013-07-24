@@ -7,7 +7,11 @@ $(document).ready(function() {
         } else if ($(".user").val() == "") {
             $(".user").focus().after("<br class='error'><span class='error btn btn-small btn-danger'>Por favor Ingrese su Nombre de Usuario</span>");
             return false;
-        } else if ($(".pass").val() == "") {
+        } else if (!checkUsername($(".user").val())) {
+            $(".user").focus().after("<br class='error'><span class='error btn btn-small btn-danger'>No se admiten Espacios en Blanco o Caracteres Extraños</span>");
+            return false;
+        }
+        else if ($(".pass").val() == "") {
             $(".pass").focus().after("<br class='error'><span class='error btn btn-small btn-danger'>Ingrese su Contraseña</span>");
             return false;
         } else if ($(".confirm_pass").val() == "") {
@@ -21,11 +25,10 @@ $(document).ready(function() {
             return false;
         }
 
-
         if ($("#terminosCondiciones").is(':checked')) {
             return true;
         } else {
-            $(".terminosCondiciones").focus().after("<span class='error error-terminos btn btn-small btn-danger'>No has aceptado los Terminos y Condiciones de Partituras Musicales.</span>");
+            $(".terminosCondiciones").focus().after("<br class='error'><span class='error error-terminos btn btn-small btn-danger'>No has aceptado los Terminos y Condiciones de Partituras Musicales.</span>");
             return false;
         }
 
@@ -40,17 +43,6 @@ $(document).ready(function() {
     $('#terminosCondiciones').change(function() {
         $(".error-terminos").css('display', 'none');
     });
-
-
-    $('#micheckbox').change(function() {
-        var checkeado = $(this).attr("checked");
-        if (checkeado) {
-            alert('activado');
-        } else {
-            alert('desactivado');
-        }
-    });
-
 
     $(".botonLogin").click(function() {
         $(".errorLogin").remove();
@@ -73,7 +65,7 @@ $(document).ready(function() {
 
     $(".recuperar_datos").click(function() {
         $(".errorRecuperar").remove();
-
+        $(".error-recuperar").css("display", "none");
         if ($(".caja_recuperar_datos").val() == "" || !is_email($(".caja_recuperar_datos").val())) {
             $(".caja_recuperar_datos").focus().after("<br  class='errorRecuperar'><span class='error error-recuperar btn btn-small btn-danger'>Por favor Ingrese un Correo Válido</span>");
             return false;
@@ -103,6 +95,22 @@ $(document).ready(function() {
     });
 
     $("#abrir_modal").click(function(evento) {
+        $("#formularioIngreso").css("display", "block");
+        $("#titulo_iniciar_sesion").css("display", "block");
+        $("#titulo_recuperar_datos").css("display", "none");
+        $("#recuperarDatos").css("display", "none");
+        $("#titulo_registro_usuario").css("display", "none");
+        $("#frmRegistroUsuario").css("display", "none");
+        $("#confirmarCuenta").css('display', 'none');
+        $("#titulo_confirmar_cuenta").css("display", "none");
+        limpiaForm($("#formularioLogin"));
+        limpiaForm($("#formularioRecovery"));
+        limpiaForm($("#formularioRegistro"));
+        $(".error-recuperar").css("display", "none");
+
+    });
+
+    $("#logindesdeConfirmarCorreo").click(function(evento) {
         $("#formularioIngreso").css("display", "block");
         $("#titulo_iniciar_sesion").css("display", "block");
         $("#titulo_recuperar_datos").css("display", "none");
@@ -233,4 +241,48 @@ function activarObjetoAjax(estado) {
         $('#ajaxModal').modal({backdrop: 'static', keyboard: false});
     if (estado === 0)
         $('#ajaxModal').modal('hide');
+}
+
+//Imprimir un vector json en un alert.
+function print_r(arr, level) {
+    var dumped_text = "";
+    if (!level)
+        level = 0;
+
+//The padding given at the beginning of the line.
+    var level_padding = "";
+    for (var j = 0; j < level + 1; j++)
+        level_padding += "    ";
+
+    if (typeof(arr) == 'object') { //Array/Hashes/Objects 
+        for (var item in arr) {
+            var value = arr[item];
+
+            if (typeof(value) == 'object') { //If it is an array,
+                dumped_text += level_padding + "'" + item + "' ...\n";
+                dumped_text += print_r(value, level + 1);
+            } else {
+                dumped_text += level_padding + "'" + item + "' => \"" + value + "\"\n";
+            }
+        }
+    } else { //Stings/Chars/Numbers etc.
+        dumped_text = "===>" + arr + "<===(" + typeof(arr) + ")";
+    }
+    return dumped_text;
+}
+
+
+
+function checkUsername(username) {
+    var iChars = "!@#$%^&*()+=-[]\\';,./{}|\":<>?";
+    if (username.search(" ") == -1) {
+        for (var i = 0; i < username.length; i++) {
+            if (iChars.indexOf(username.charAt(i)) != -1) {
+               return false;
+            }
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
