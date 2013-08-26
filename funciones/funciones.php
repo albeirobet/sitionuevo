@@ -173,6 +173,24 @@ function registroUsuarios() {
     }
 }
 
+function  getInformacionPerfilUsuario(){
+    $username = $_POST['username'];
+    if(!empty($username)){
+    $arreglo = getElementosEspecificos('tbl_users', 'user', $username, 'string');
+    $contador = 0;
+        foreach ($arreglo as $row) {
+            $arr[$contador] =
+                    array('Nombres' => $row['nombres'],
+                        'NomUsuario' => $row['user'],
+                        'Correo' => $row['email'],
+                        'Id' => $row['id']);
+            $contador++;
+        }
+        echo '' . json_encode($arr) . '';
+    }
+    echo '';
+}
+
 function enviarCorreo($destinatario, $username, $password, $codigoverificacion, $tipoCorreo) {
 
     $mensaje = plantillaCorreoElectronico($username, $password, $codigoverificacion, $tipoCorreo);

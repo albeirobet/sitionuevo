@@ -71,7 +71,7 @@ include 'funciones/evitarCache.php';
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <b class="caret"></b></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#"><i class="icon-share"></i> Donar Partitura</a></li>
-                                        <li><a href="#"><i class="icon-edit"></i> Editar Perfil</a></li>
+                                        <li><a href="paginas/perfil_usuario.php"><i class="icon-edit"></i> Editar Perfil</a></li>
                                         <li><a style="cursor: pointer;" onclick="cerrarSesionIndex()"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a></li>
                                         <?php
                                         if ($_SESSION['Tipo_Usuario'] == 'Administrador') {
@@ -479,6 +479,7 @@ include 'funciones/evitarCache.php';
         <script src="js/cargasDinamicas/cerrarSesion.js"></script>
         <script src="js/tamanioVentana.js"></script>
         <script type="text/javascript" src="js/cargasDinamicas/funciones.js"></script>
+        <script type="text/javascript" src="js/eventosGenericos.js"></script>
 
         <!--Fin Carga de Scripts-->        
         <script language="javascript">

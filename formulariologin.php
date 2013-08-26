@@ -41,7 +41,6 @@ and open the template in the editor.
                         <input type="submit" value="Cancelar" class="boton btn btn-small btn-danger cancelarRegistro" style="margin-top: 6px;">
                         <br>
                         <span id="informacionRegistro" style="margin-left: 2px;font-size:12px;"></span>
-
                     </div>
                 </form>
                 <br><br>

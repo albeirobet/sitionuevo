@@ -16,6 +16,10 @@ function crearConexion() {
     return $conn;
 }
 
+function cerrarConexion($conn) {
+    $conn = null;
+}
+
 /*
  * Funcion encargada de retornar todos los elementos de una tabla,
  * Paramteros: Nombre Tabla.
@@ -27,6 +31,7 @@ function getElementosTabla($nombreTabla) {
     $stmt = $conn->prepare("SELECT * FROM $nombreTabla");
     $stmt->execute();
     $arreglo = $stmt->fetchAll();
+    cerrarConexion($conn);
     return $arreglo;
 }
 
@@ -51,6 +56,7 @@ function getElementosEspecificos($nombreTabla, $columna, $valor, $tipo) {
     }
     $stmt->execute();
     $arreglo = $stmt->fetchAll();
+    cerrarConexion($conn);
     return $arreglo;
 }
 
@@ -75,6 +81,7 @@ function getElementosEspecificosPorLimite($nombreTabla, $columna, $valor, $tipo,
     }
     $stmt->execute();
     $arreglo = $stmt->fetchAll();
+    cerrarConexion($conn);
     return $arreglo;
 }
 
@@ -92,6 +99,7 @@ function getCantidadRegistros($nombreTabla) {
     foreach ($arreglo as $row) {
         $cantidad = $row["cantidad"];
     }
+    cerrarConexion($conn);
     return $cantidad;
 }
 
@@ -107,6 +115,7 @@ function getElementosPorLimiteTabla($nombreTabla, $columna, $orden, $limite) {
     $stmt = $conn->prepare("SELECT * FROM $nombreTabla ORDER BY $columna $orden LIMIT $limite");
     $stmt->execute();
     $arreglo = $stmt->fetchAll();
+    cerrarConexion($conn);
     return $arreglo;
 }
 
@@ -125,6 +134,7 @@ function loginUsers($nombreTabla, $colNombreUsuario, $username, $colPassword, $p
     $stmt->bindValue(':password', $password, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->rowCount();
+    cerrarConexion($conn);
     if ($count == 1) {
         $arreglo = $stmt->fetchAll();
         return $arreglo;
@@ -136,7 +146,7 @@ function loginUsers($nombreTabla, $colNombreUsuario, $username, $colPassword, $p
 function registerUsers($nombreTabla, $username, $email, $nombres, $password, $fechaRegistro, $ip, $ciudad, $region, $pais, $codigoverificacion) {
     $existe = userExiste($nombreTabla, $username, $email);
     if ($existe == 0) {
-        
+
         $conn = crearConexion();
         $stmt = $conn->prepare("INSERT INTO $nombreTabla (tipo_usuario, nombres, user, pass, email, fecha_registro, estado, codigo_verificacion, ip, ciudad, region, pais) VALUES ('Usuario', :nombres, :username, :password, :email, :fechaRegistro, 'Pendiente', :codigoVerificacion, :ip, :ciudad, :region, :pais)");
         $stmt->bindValue(':nombres', $nombres, PDO::PARAM_STR);
@@ -151,6 +161,7 @@ function registerUsers($nombreTabla, $username, $email, $nombres, $password, $fe
         $stmt->bindValue(':pais', $pais, PDO::PARAM_STR);
         $stmt->execute();
         $ingreso = $stmt->rowCount();
+        cerrarConexion($conn);
         return $ingreso;
     } else {
         return $existe;
@@ -167,31 +178,43 @@ function userExiste($nombreTabla, $username, $email) {
     foreach ($arreglo as $row) {
         $cantidad = $row["contador"];
     }
+    cerrarConexion($conn);
     return $cantidad;
 }
 
-function confirmarCuenta($nombreTabla, $codigoVerificacion){
+function confirmarCuenta($nombreTabla, $codigoVerificacion) {
     $conn = crearConexion();
     $stmt = $conn->prepare("UPDATE $nombreTabla set  estado='Activo', codigo_verificacion=0 where codigo_verificacion=:codigoVerificacion");
     $stmt->bindValue(':codigoVerificacion', $codigoVerificacion, PDO::PARAM_INT);
     $stmt->execute();
     $count = $stmt->rowCount();
+    cerrarConexion($conn);
     return $count;
 }
 
-
-function recuperarDatosCuenta($nombreTabla, $email){
-  $conn = crearConexion();
+function recuperarDatosCuenta($nombreTabla, $email) {
+    $conn = crearConexion();
     $stmt = $conn->prepare("SELECT user, pass FROM $nombreTabla WHERE email=:email AND estado = 'Activo'");
     $stmt->bindValue(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
     $count = $stmt->rowCount();
+    cerrarConexion($conn);
     if ($count == 1) {
         $arreglo = $stmt->fetchAll();
         return $arreglo;
     } else {
         return false;
-    }  
+    }
+}
+
+function datosPerfilUsuario($nombreTabla, $username) {
+    $conn = crearConexion();
+    $stmt = $conn->prepare("SELECT * FROM $nombreTabla WHERE user =:username");
+    $stmt->bindValue(':user', $username, PDO::PARAM_STR);
+    $stmt->execute();
+    $arreglo = $stmt->fetchAll();
+    cerrarConexion($conn);
+    return $arreglo;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -224,6 +247,7 @@ function getPartiturasPorGenero($nombreTabla, $genero, $limite, $filtro, $palabr
     $stmt->bindValue(':gen', $genero, PDO::PARAM_STR);
     $stmt->execute();
     $arreglo = $stmt->fetchAll();
+    cerrarConexion($conn);
     return $arreglo;
 }
 
@@ -240,6 +264,7 @@ function getCantidadPartiturasPorGenero($nombreTabla, $genero, $palabra) {
     foreach ($arreglo as $row) {
         $cantidad = $row["contador"];
     }
+    cerrarConexion($conn);
     return $cantidad;
 }
 
@@ -252,6 +277,7 @@ function updateContadorDescargasPartitura($nombreTabla, $columna, $id) {
     foreach ($arreglo as $row) {
         $cantidad = $row[$columna];
     }
+    cerrarConexion($conn);
     return $cantidad;
 }
 
@@ -264,6 +290,7 @@ function updateDatosLocalizacionUsuario($nombreTabla, $ip, $ciudad, $region, $pa
     $stmt->bindValue(':pais', $pais, PDO::PARAM_STR);
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
+    cerrarConexion($conn);
 }
 
 ?>

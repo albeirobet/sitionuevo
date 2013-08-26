@@ -6,22 +6,18 @@ include '../funciones/evitarCache.php';
 <html lang="es">
     <head>
         <title>&#191;Quienes Somos?</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- Bootstrap -->
         <link href="../css/bootstrap.css" rel="stylesheet" media="screen">
         <link href="../css/bootstrap-responsive.css" rel="stylesheet">
         <!--Fin Bootstrap-->
         <link href="../css/estilosPersonalizados.css" rel="stylesheet">
-
         <link rel="apple-touch-icon" href="../img/apple-touch-icon-iphone.png" /> 
         <link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-ipad.png" /> 
         <link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-iphone4.png" />
         <link rel="apple-touch-icon" sizes="144x144" href="../img/apple-touch-icon-ipad3.png" />
         <link rel="shortcut icon" href="../img/clave.png">
-
-
-
-
     </head>
     <body>
 
@@ -65,7 +61,7 @@ include '../funciones/evitarCache.php';
                                             <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <span class="caret"></span></button>
                                             <ul class="dropdown-menu">
                                                 <li><a href="#"><i class="icon-share"></i> Donar Partitura</a></li>
-                                                <li><a href="#"><i class="icon-edit"></i> Editar Perfil</a></li>
+                                                <li><a href="perfil_usuario.php"><i class="icon-edit"></i> Editar Perfil</a></li>
                                                 <li class="divider"></li>
                                                 <li><a style="cursor: pointer;" onclick="cerrarSesionResto()"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a></li>
                                             </ul>
@@ -183,6 +179,7 @@ include '../funciones/evitarCache.php';
         <script src="../js/bootstrap.min.js"></script>
         <script src="../js/cargasDinamicas/cerrarSesion.js"></script>
         <script src="../js/script_menu_activos.js"></script>
+        <script type="text/javascript" src="../js/eventosGenericos.js"></script>
         <!--Fin Carga de Scripts-->        
     </body>
 </html>

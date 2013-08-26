@@ -8,6 +8,7 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
     <html lang="es">
         <head>
             <title>Partituras</title>
+            <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <!-- Bootstrap -->
             <link href="../css/bootstrap.css" rel="stylesheet" media="screen">
@@ -80,7 +81,7 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="#"><i class="icon-share"></i> Donar Partitura</a></li>
-                                            <li><a href="#"><i class="icon-edit"></i> Editar Perfil</a></li>
+                                            <li><a href="perfil_usuario.php"><i class="icon-edit"></i> Editar Perfil</a></li>
                                             <li><a style="cursor: pointer;" onclick="cerrarSesionIndex()"><i class="icon-off"></i> Cerrar Sesi&oacute;n</a></li>
                                             <?php
                                             if ($_SESSION['Tipo_Usuario'] == 'Administrador') {
@@ -221,6 +222,7 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
             <script src="../js/cargasDinamicas/cerrarSesion.js"></script>
             <script src="../js/script_menu_activos.js"></script>
             <script src="../js/cargasDinamicas/cargasPorGenero.js"></script>
+            <script type="text/javascript" src="../js/eventosGenericos.js"></script>
             <!--Fin Carga de Scripts-->  
             <div id="ajaxModal" class="modal hide fade" tabindex="-1" data-keyboard="false" data-backdrop="static" style="height: 35px;">
                 <div class="progress progress-striped active">
