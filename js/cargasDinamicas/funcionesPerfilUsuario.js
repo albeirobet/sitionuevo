@@ -28,7 +28,7 @@ function activarEdicionClaveUsuario() {
         $("#edit-claveusuario").hide();
         $("#edit-claveusuario-cancelar").hide();
         $("#edit-claveusuario-mostrar").show();
-         $("#clave_old").attr('disabled', true);
+        $("#clave_old").attr('disabled', true);
         $("#clave_new").attr('disabled', true);
         $("#confirm_clave_new").attr('disabled', true);
     });
@@ -64,7 +64,7 @@ function getInformacionPerfilUsuario() {
         complete: function() {
             activarObjetoAjax(0);
             $("#clave_old").val('');
-
+            clearconsole();
         },
         cache: false,
         error: function(data, errorThrown)
@@ -120,18 +120,19 @@ function validarFormularioEdicionPerfil() {
             } else if ($("#clave_new").val() == "") {
                 $("#clave_new").focus().after("<br class='error'><br class='error'><span class='error btn btn-small btn-danger'>Ingrese su Nueva Contraseña</span>");
                 return false;
-            }  
+            }
             else if ($("#confirm_clave_new").val() == "") {
                 $("#confirm_clave_new").focus().after("<br class='error'><br class='error'><span class='error btn btn-small btn-danger'>Confirme su Nueva Contraseña</span>");
                 return false;
             } else if ($("#confirm_clave_new").val() != $("#clave_new").val()) {
                 $("#confirm_clave_new").focus().after("<br class='error'><br class='error'><span class='error btn btn-small btn-danger'>Las Contraseñas no coinciden</span>");
                 return false;
-            }else{
+            } else {
                 return true;
             }
-        }        
-        else{
+        }
+        else {
+            band = 0;
             return true;
         }
     });
@@ -141,7 +142,7 @@ function validarFormularioEdicionPerfil() {
             return false;
         }
     });
-    $("#nom_usuario_edit, #nom_ape_usuario_edit, #correo_usuario_edit, #clave_newm,  #confirm_clave_new").change(function() {
+    $("#nom_usuario_edit, #nom_ape_usuario_edit, #correo_usuario_edit, #clave_old, #clave_newm,  #confirm_clave_new").change(function() {
         if ($(this).val() != "") {
             $(".error").fadeOut();
             return false;
@@ -150,23 +151,49 @@ function validarFormularioEdicionPerfil() {
 }
 
 
-function  editarPerfil(){
-     $('#edit-perfil').submit(function() {
-            $.ajax({
-                type: 'POST',
-                url: '../funciones/funciones.php',
-                data: $(this).serialize(),
-                beforeSend: function(data) {
-                    activarObjetoAjax(1);
-                },
-                success: function(data) {
-                   console.log(data);
-                },
-                complete: function() {
-                    activarObjetoAjax(0);
+function  editarPerfil() {
+    $('#edit-perfil').submit(function() {
+        $('#bandera').val(band);
+        $.ajax({
+            type: 'POST',
+            url: '../funciones/funciones.php',
+            data: $(this).serialize(),
+            beforeSend: function(data) {
+                activarObjetoAjax(1);
+            },
+            success: function(data) {
+                switch ($.trim(data))
+                {
+                    case '0':
+                        console.log('El perfil se actualizo con exito');
+                        $("#nombre_usuario").html($("#nom_usuario_edit").val());
+                        mostrarMensajeSistema('msg_edicion_perfil', 'exito', 'Edici&oacute;n Exitosa', 'Tu perfil ha sido editado correctamente' , true);
+                        break;
+                    case '1':
+                        mostrarMensajeSistema('msg_edicion_perfil', 'error', 'Error al editar Perfil', 'El nombre de usuario ya esta en uso' , false);
+                        break;
+                    case '2':
+                        mostrarMensajeSistema('msg_edicion_perfil', 'error', 'Error al editar Perfil', 'El correo electronico ya esta en uso' , false);
+                        break;
+                    case '3':
+                        mostrarMensajeSistema('msg_edicion_perfil', 'error', 'Error al editar Perfil', 'La nueva clave es igual a la actual' , false);
+                        break;
+                    case '4':
+                        mostrarMensajeSistema('msg_edicion_perfil', 'error', 'Error al editar Perfil', 'Las claves no coinciden' , false);
+                        break;
+                    case '-1':
+                        mostrarMensajeSistema('msg_edicion_perfil', 'error', 'Error al editar Perfil', 'Se produjo un error al editar el perfil' , false);
+                        break;
+                    default:
+                       mostrarMensajeSistema('msg_edicion_perfil', 'informacion', 'No se edito Perfil', 'No se realizaron cambios en el perfil de usuario' , true); 
+                       console.log('No se realizaron cambios en el perfil de usuario');
                 }
-            });
-      
+            },
+            complete: function() {
+                activarObjetoAjax(0);
+            }
+        });
+
         return false;
     });
 }

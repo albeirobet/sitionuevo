@@ -24,7 +24,6 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
         </head>
         <body>
             <input type="text" hidden="true" style="display: none" value="<?php echo $nombreUsuario; ?>" id="username_perfil">
-            <input type="text" hidden="true" style="display: none" value="" id="id_usuario">
             <!--Inicio Navbar Estatico-->
             <div class="navbar navbar-inverse navbar-fixed-top">
                 <div class="navbar-inner">
@@ -72,7 +71,7 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
                                     $nombreUsuario = $_SESSION["Nombre_Usuario"];
                                     ?>
                                     <li class="active dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <?php echo $nombreUsuario; ?> <b class="caret"></b></a>
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> <span id="nombre_usuario"><?php echo $nombreUsuario; ?></span> <b class="caret"></b></a>
                                         <ul class="dropdown-menu">
                                             <li><a href="#"><i class="icon-share"></i> Donar Partitura</a></li>
                                             <li><a href="perfil_usuario.php"><i class="icon-edit"></i> Editar Perfil</a></li>
@@ -153,31 +152,36 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
 
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="perfil">
+                                                <div id="msg_edicion_perfil" style="display: none">
+                                                  
+                                                </div>
                                                 <form id="edit-perfil" name="edit-perfil" class="form-horizontal">
-                                                     <input type="hidden" name="funcion" id="funcion" value="editarPerfilUsuario">
+                                                    <input type="hidden" name="funcion" id="funcion" value="editarPerfilUsuario">
+                                                    <input type="hidden" name="bandera" id="bandera" value="">
+                                                    <input type="hidden" name="id_usuario" id="id_usuario" value="" >
                                                     <fieldset>
                                                         <div class="control-group">											
                                                             <label class="control-label" for="nom_usuario_edit">Nombre de Usuario: </label>
                                                             <div class="controls">
-                                                                <input type="text" class="input-medium" id="nom_usuario_edit" value="" required="required" placeholder="Nombre de Usuario">
+                                                                <input type="text" class="input-medium" id="nom_usuario_edit" name="nom_usuario_edit" value="" required="required" placeholder="Nombre de Usuario">
                                                             </div> 				
                                                         </div> 
                                                         <div class="control-group">											
                                                             <label class="control-label" for="nom_ape_usuario_edit">Nombre y Apellido: </label>
                                                             <div class="controls">
-                                                                <input type="text" class="input-medium" id="nom_ape_usuario_edit" value="" required="required" placeholder="Nombre y Apellido">
+                                                                <input type="text" class="input-medium" id="nom_ape_usuario_edit" name="nom_ape_usuario_edit" value="" required="required" placeholder="Nombre y Apellido">
                                                             </div> 			
                                                         </div> 
 
                                                         <div class="control-group">											
                                                             <label class="control-label" for="correo_usuario_edit">Correo Electr&oacute;nico: </label>
                                                             <div class="controls">
-                                                                <input type="email" class="input-large" id="correo_usuario_edit" value="" required="required" placeholder="Correo Electronico">
+                                                                <input type="email" class="input-medium" id="correo_usuario_edit" name="correo_usuario_edit" value="" required="required" placeholder="Correo Electronico">
                                                             </div> 		
                                                         </div> 
 
                                                         <div class="control-group">
-                                                           <a id="edit-claveusuario-mostrar" href="#"> <label class="control-label">Cambiar Contraseña</label></a>
+                                                            <a id="edit-claveusuario-mostrar" href="#"> <label class="control-label">Cambiar Contraseña</label></a>
                                                         </div>
                                                         <div class="control-group">
                                                             <a id="edit-claveusuario-cancelar" style="display: none" href="#"><label class="control-label">Cancelar Cambio Contraseña</label></a>
@@ -186,19 +190,19 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
                                                             <div class="control-group">											
                                                                 <label class="control-label" for="clave_old">Contraseña Anterior: </label>
                                                                 <div class="controls">
-                                                                    <input type="password" disabled="disabled" class="input-medium" id="clave_old" value="" placeholder="Contraseña Anterior" required="required">
+                                                                    <input type="password" disabled="disabled" class="input-medium" id="clave_old" name="clave_old" value="" placeholder="Contraseña Anterior" required="required">
                                                                 </div>			
                                                             </div>
                                                             <div class="control-group">											
                                                                 <label class="control-label" for="clave_new">Nueva Contraseña: </label>
                                                                 <div class="controls">
-                                                                    <input type="password" disabled="disabled" class="input-medium" id="clave_new" value="" placeholder="Nueva Contraseña" required="required">
+                                                                    <input type="password" disabled="disabled" class="input-medium" id="clave_new" name="clave_new" value="" placeholder="Nueva Contraseña" required="required">
                                                                 </div> 				
                                                             </div> 
                                                             <div class="control-group">											
                                                                 <label class="control-label" for="confirm_clave_new">Confirmar Contraseña: </label>
                                                                 <div class="controls">
-                                                                    <input type="password" disabled="disabled" class="input-medium" id="confirm_clave_new" value="" placeholder="Confirmar Contraseña" required="required">
+                                                                    <input type="password" disabled="disabled" class="input-medium" id="confirm_clave_new" name="confirm_clave_new" value="" placeholder="Confirmar Contraseña" required="required">
                                                                 </div> 				
                                                             </div> 
                                                         </div>
@@ -329,9 +333,10 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
             <script src="../js/jquery.js"></script>
             <script src="../js/bootstrap.js"></script>
             <script src="../js/cargasDinamicas/cerrarSesion.js"></script>
+            <script type="text/javascript" src="../js/eventosGenericos.js"></script>
             <script src="../js/cargasDinamicas/funcionesPerfilUsuario.js"></script>
             <script src="../js/script_menu_activos.js"></script>
-            <script type="text/javascript" src="../js/eventosGenericos.js"></script>
+            
             <!--Fin Carga de Scripts-->        
             <div id="ajaxModal" class="modal hide fade" tabindex="-1" data-keyboard="false" data-backdrop="static" style="height: 35px;">
                 <div class="progress progress-striped active">

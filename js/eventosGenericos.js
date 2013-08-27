@@ -49,7 +49,7 @@ function checkUsername(username) {
     if (username.search(" ") == -1) {
         for (var i = 0; i < username.length; i++) {
             if (iChars.indexOf(username.charAt(i)) != -1) {
-               return false;
+                return false;
             }
         }
         return true;
@@ -58,4 +58,50 @@ function checkUsername(username) {
     }
 }
 
+function clearconsole() {
+    console.log(window.console);
+    if (window.console || window.console.firebug) {
+        console.clear();
+    }
+}
+
+/*
+ * Funcion Creada para mostrar mensajes del Informativos para el usuario
+ * Parametros
+ * idDiv del Div donde se mostrara el mensaje
+ * tipoMensaje: Puede ser de 4 tipos: error, advertencia, informacion ó  exito
+ * tituloMensaje: El titulo del mensaje para el usuario
+ * mensaje: Es el mensaje que se va a mostrar al usuario
+ * cerrarMensaje: variable booleana para permitir cerrar el mensaje
+ */
+
+
+function mostrarMensajeSistema(idDiv, tipoMensaje, tituloMensaje, mensaje, cerrarMensaje) {
+     $('#' + idDiv).html('').removeClass();
+    var claseMensaje ='';
+    var botonCerrarMensaje = '<button type="button" class="close" data-dismiss="alert">&times;</button>';
+    switch (tipoMensaje) {
+        case 'error':
+            claseMensaje='alert alert-error';
+            break;
+        case 'advertencia':
+             claseMensaje='alert alert-block';
+            break;
+        case 'informacion':
+             claseMensaje='alert alert-info';
+            break;
+        case 'exito':
+             claseMensaje='alert alert-success';
+            break;
+    }
+    if(!cerrarMensaje){
+       botonCerrarMensaje=''; 
+    }
+    var titulo = '<h6>'+tituloMensaje+'</h6>';
+    $('#' + idDiv).addClass(claseMensaje).html(botonCerrarMensaje+titulo+mensaje).css('display', 'block');
+}
+
+function ocultarMensajeSistema() {
+
+}
 

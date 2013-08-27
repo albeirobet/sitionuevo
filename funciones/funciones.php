@@ -144,7 +144,6 @@ function loginUsuarios() {
     echo '' . json_encode($arr) . '';
 }
 
-
 function registroUsuarios() {
     $username = $_POST['username'];
     $email = $_POST['email_register'];
@@ -162,20 +161,20 @@ function registroUsuarios() {
         if ($ingreso == 1) {
             enviarCorreo($email, $username, $password, $codigoverificacion, 1);
             $arr[0] = array('estado' => '1');
-            echo '' . json_encode($arr) . '';
+            echo '1';
         } else {
             $arr[0] = array('estado' => '0');
-            echo '' . json_encode($arr) . '';
+            echo '0';
         }
     } else {
         $arr[0] = array('estado' => '0');
-        echo '' . json_encode($arr) . '';
+        echo '0';
     }
 }
 
-function  getInformacionPerfilUsuario(){
+function getInformacionPerfilUsuario() {
     $username = $_POST['username'];
-    if(!empty($username)){
+    if (!empty($username)) {
         $arreglo = getElementosEspecificos('tbl_users', 'user', $username, 'string');
         $contador = 0;
         foreach ($arreglo as $row) {
@@ -191,9 +190,104 @@ function  getInformacionPerfilUsuario(){
     echo '';
 }
 
-function editarPerfilUsuario(){
-   
-    echo $nom_usuario_edit = $_POST['nom_usuario_edit'];
+function editarPerfilUsuario() {
+    $idUsuario = $_POST['id_usuario'];
+    $username = $_POST['nom_usuario_edit'];
+    $nombres = $_POST['nom_ape_usuario_edit'];
+    $correo = $_POST['correo_usuario_edit'];
+    $claveAnterior = $_POST['clave_old'];
+    $claveNueva = $_POST['clave_new'];
+    $claveConfirmacion = $_POST['confirm_clave_new'];
+    $bandera = $_POST['bandera'];
+    $error = '0';
+    //echo '-'.$username.' - '.$nombres.' - '.$correo.' - '.$claveAnterior.' - '.$claveNueva.' - '.$confirmacionClava.' bandera '.$bandera;
+    if (!empty($username) && !empty($nombres) && !empty($correo)) {
+        $arreglo = getElementosEspecificos('tbl_users', 'id', $idUsuario, 'int');
+        if ($arreglo != null) {
+            foreach ($arreglo as $row) {
+                $idBd = $row['id'];
+                $usernameBd = $row['user'];
+                $nombresBd = $row['nombres'];
+                $claveBd = $row['pass'];
+                $correoBd = $row['email'];
+            }
+            $editarUsername = 0;
+            $editarCorreo = 0;
+            $editarClave = 0;
+
+            if ($username != $usernameBd) {
+                $resultadoUser = registroExisteColumna('tbl_users', 'user', $username);
+                if ($resultadoUser == 0) {
+                    $editarUsername = 1;
+                } else {
+                    $error = '1';
+                }
+            }
+
+            if ($correo != $correoBd) {
+                $resultadoCorreo = registroExisteColumna('tbl_users', 'email', $correo);
+                if ($resultadoCorreo == 0) {
+                    $editarCorreo = 1;
+                } else {
+                    if ($error == '0')
+                        $error = '2';
+                }
+            }
+            if ($bandera == 1) {
+                if (!empty($claveNueva) && !empty($claveConfirmacion) && !empty($claveAnterior)) {
+                    if ($claveNueva == $claveConfirmacion) {
+                        if ($claveNueva != $claveBd) {
+                            $editarClave = 1;
+                        } else {
+                            if ($error == '0')
+                                $error = '3';
+                        }
+                    }else {
+                        if ($error == '0')
+                            $error = '4';
+                    }
+                }else {
+                    if ($error == '0')
+                        $error = '-1';
+                }
+            }
+
+            if ($error == '0') {
+                $edicion = '1';
+                if ($editarUsername == 1) {
+                    $resEditUsername = editarRegistroColumna('tbl_users', 'user', $username, 'id', $idUsuario);
+                    if ($resEditUsername == 1) {
+                        $edicion = '0';
+                        session_start();
+                        $_SESSION["Nombre_Usuario"] = $username;
+                    }
+                }
+                if ($editarCorreo == 1) {
+                    $resEditCorreo = editarRegistroColumna('tbl_users', 'email', $correo, 'id', $idUsuario);
+                    if ($resEditCorreo == 1 && $edicion == '1') {
+                        $edicion = '0';
+                    }
+                }
+                if ($editarClave == 1) {
+                    $resEditClave = editarRegistroColumna('tbl_users', 'pass', $claveConfirmacion, 'id', $idUsuario);
+                    if ($resEditClave == 1 && $edicion == '1') {
+                        $edicion = '0';
+                    }
+                }
+                echo $edicion;
+            } else {
+                echo $error;
+            }
+
+//            echo '$editarUsername:  '.$editarUsername.'  $editarCorreo:  '.$editarCorreo.'  $editarClave:  '.$editarClave;
+        } else {
+            if ($error == '0')
+                $error = '-1';
+        }
+    }else {
+        if ($error == '0')
+            $error = '-1';
+    }
 }
 
 function enviarCorreo($destinatario, $username, $password, $codigoverificacion, $tipoCorreo) {
@@ -220,7 +314,7 @@ function enviarCorreo($destinatario, $username, $password, $codigoverificacion, 
 function recuperarDatos() {
     $email = $_POST['email_recovery'];
     $arr[0] = array('estado' => '0');
-    if($email){
+    if ($email) {
         $arreglo = recuperarDatosCuenta('tbl_users', $email);
         if (!$arreglo == false) {
             foreach ($arreglo as $fila) {
@@ -284,7 +378,7 @@ function plantillaCorreoElectronico($username, $password, $codigoverificacion, $
             }
 
         </style>';
-    if($tipoCorreo==1){
+    if ($tipoCorreo == 1) {
         $divBienvenidos = '<div class="page-header">
                         <h3>Bienvenido a Partituras Musicales!</h3>
                         <h6 style="margin-top: -20px">Gracias por registrarte y ser parte de esta Comunidad.</h6>
@@ -305,7 +399,7 @@ function plantillaCorreoElectronico($username, $password, $codigoverificacion, $
                                 <a href="http://partiturasmusicales.vacau.com/funciones/confirmarCorreo.php?codigo=' . $codigoverificacion . '">http://www.partiturasmusicales.site90.com/funciones/confirmarCorreo.php?codigo=' . $codigoverificacion . '</a> <br>
                                 </p>';
     }
-    if($tipoCorreo==2){
+    if ($tipoCorreo == 2) {
         $divBienvenidos = '<div class="page-header">
                         <h3>Bienvenido de vuelta a Partituras Musicales!</h3>
                         <h6 style="margin-top: -20px">Gracias por ser parte de esta Comunidad.</h6>
@@ -385,7 +479,6 @@ function plantillaCorreoElectronico($username, $password, $codigoverificacion, $
 </html>';
     return $mensaje;
 }
-
 
 function cerrarSesion() {
     session_start();
@@ -885,7 +978,5 @@ function respuestaComentario() {
     mail($destinatario, $asunto, $mensaje, $headers);
     include 'desconectar.php';
 }
-
-
 
 ?>

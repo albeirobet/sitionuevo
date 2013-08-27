@@ -10,7 +10,7 @@
 
 function crearConexion() {
     try {
-        $conn = new PDO('mysql:host=localhost;dbname=bd_partituras_musicales;charset=utf8', 'root', '');
+        $conn = new PDO('mysql:host=localhost;dbname=bd_partituras_musicales;charset=utf8', 'root', 'hds2013');
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo "ERROR: " . $e->getMessage();
@@ -148,7 +148,7 @@ function loginUsers($nombreTabla, $colNombreUsuario, $username, $colPassword, $p
 function registerUsers($nombreTabla, $username, $email, $nombres, $password, $fechaRegistro, $ip, $ciudad, $region, $pais, $codigoverificacion) {
     $existe = userExiste($nombreTabla, $username, $email);
     if ($existe == 0) {
-        
+
         $conn = crearConexion();
         $stmt = $conn->prepare("INSERT INTO $nombreTabla (tipo_usuario, nombres, user, pass, email, fecha_registro, estado, codigo_verificacion, ip, ciudad, region, pais) VALUES ('Usuario', :nombres, :username, :password, :email, :fechaRegistro, 'Pendiente', :codigoVerificacion, :ip, :ciudad, :region, :pais)");
         $stmt->bindValue(':nombres', $nombres, PDO::PARAM_STR);
@@ -166,7 +166,7 @@ function registerUsers($nombreTabla, $username, $email, $nombres, $password, $fe
         cerrarConexion($conn);
         return $ingreso;
     } else {
-        return $existe;
+        return 0;
     }
 }
 
@@ -182,6 +182,30 @@ function userExiste($nombreTabla, $username, $email) {
     }
     cerrarConexion($conn);
     return $cantidad;
+}
+
+function registroExisteColumna($nombreTabla, $campo, $valor) {
+    $conn = crearConexion();
+    $stmt = $conn->prepare("SELECT count(id) as contador FROM $nombreTabla WHERE $campo=:valor");
+    $stmt->bindValue(':valor', $valor, PDO::PARAM_STR);
+    $stmt->execute();
+    $arreglo = $stmt->fetchAll();
+    foreach ($arreglo as $row) {
+        $cantidad = $row["contador"];
+    }
+    cerrarConexion($conn);
+    return $cantidad;
+}
+
+function editarRegistroColumna($nombreTabla, $campo, $valor, $columnaFiltro, $filtro) {
+    $conn = crearConexion();
+    $stmt = $conn->prepare("UPDATE $nombreTabla SET  $campo=:valor WHERE $columnaFiltro=:filtro");
+    $stmt->bindValue(':valor', $valor, PDO::PARAM_STR);
+    $stmt->bindValue(':filtro', $filtro, PDO::PARAM_STR);
+    $stmt->execute();
+    $count = $stmt->rowCount();
+    cerrarConexion($conn);
+    return $count;
 }
 
 function confirmarCuenta($nombreTabla, $codigoVerificacion) {
