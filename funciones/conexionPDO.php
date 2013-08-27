@@ -6,9 +6,11 @@
  * soportados por PDO (ver documentación).
  */
 
+//ini_set('display_errors', 'On');
+
 function crearConexion() {
     try {
-        $conn = new PDO('mysql:host=localhost;dbname=bd_partituras_musicales;charset=utf8', 'root', 'hds2013');
+        $conn = new PDO('mysql:host=localhost;dbname=bd_partituras_musicales;charset=utf8', 'root', '');
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo "ERROR: " . $e->getMessage();
@@ -146,7 +148,7 @@ function loginUsers($nombreTabla, $colNombreUsuario, $username, $colPassword, $p
 function registerUsers($nombreTabla, $username, $email, $nombres, $password, $fechaRegistro, $ip, $ciudad, $region, $pais, $codigoverificacion) {
     $existe = userExiste($nombreTabla, $username, $email);
     if ($existe == 0) {
-
+        
         $conn = crearConexion();
         $stmt = $conn->prepare("INSERT INTO $nombreTabla (tipo_usuario, nombres, user, pass, email, fecha_registro, estado, codigo_verificacion, ip, ciudad, region, pais) VALUES ('Usuario', :nombres, :username, :password, :email, :fechaRegistro, 'Pendiente', :codigoVerificacion, :ip, :ciudad, :region, :pais)");
         $stmt->bindValue(':nombres', $nombres, PDO::PARAM_STR);

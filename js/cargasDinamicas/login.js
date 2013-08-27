@@ -93,8 +93,8 @@ $(document).ready(function() {
                     activarObjetoAjax(1);
                 },
                 success: function(data) {
-                    var dataJson = eval(data);
-                    var estado = dataJson[0].estado;
+                   
+                    var estado = data;
                     if (estado == '1') {
                         activarObjetoAjax(0);
                         $("#titulo_registro_usuario").css("display", "none");

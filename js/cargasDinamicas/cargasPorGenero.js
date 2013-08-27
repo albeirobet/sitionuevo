@@ -63,7 +63,7 @@ function crearPaginador() {
         },
         asycn: false,
         beforeSend: function() {
-            console.log('estoy entrando a la funcion crearPaginador: ');
+            activarObjetoAjax(1);
         },
         success: function(datos) {
             var vectorPaginador = datos.split("%");
@@ -102,12 +102,13 @@ function crearPaginador() {
 
         },
         complete: function() {
-            console.log('acabe el acceso a la funcion crearPaginador');
+
             if (banderaPaginador !== 1) {
                 inferior = 1;
                 superior = 5;
                 activarPaginas();
             }
+            activarObjetoAjax(0);
         },
         cache: false,
         error: function(data, errorThrown)
@@ -130,7 +131,7 @@ function cargarPorGenero(Limite) {
         },
         async: true,
         beforeSend: function() {
-            console.log('estoy entrando a la funcion cargarPorGenero: ');
+            activarObjetoAjax(1);
         },
         success: function(datos) {
             var data = JSON.parse(datos);
@@ -178,7 +179,9 @@ function cargarPorGenero(Limite) {
         },
         complete: function() {
             console.log('acabe el acceso a la funcion cargarPorGenero: ');
+            activarObjetoAjax(0);
             $("html, body").animate({scrollTop: 0}, 1250);
+
         },
         cache: false,
         error: function(data, errorThrown)
@@ -314,16 +317,22 @@ function actualizarContadorDescargas() {
     $(document).on('click', '.contadorDescargas', function()
     {
         var idFila = $(this).attr('id');
-        var idContador=$(this).attr('id');
-        var id=idContador.charAt(idContador.length-1);
+        var idContador = $(this).attr('id');
+        var id = idContador.charAt(idContador.length - 1);
         $.ajax({
             type: 'POST',
             url: '../funciones/funciones.php',
             data: "funcion=actualizarContadorDescargas&id=" + idFila,
+            beforeSend: function() {
+                activarObjetoAjax(1);
+            },
             success: function(data) {
                 $("#contDescargas_" + idFila).html('');
                 $("#contDescargas_" + idFila).html(data);
-            }
+            },
+        complete: function() {
+            activarObjetoAjax(0);
+        }
         });
     }
     );

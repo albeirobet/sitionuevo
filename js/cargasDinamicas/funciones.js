@@ -8,7 +8,7 @@ $(document).ready(function() {
             $(".user").focus().after("<br class='error'><span class='error btn btn-small btn-danger'>Por favor Ingrese su Nombre de Usuario</span>");
             return false;
         } else if (!checkUsername($(".user").val())) {
-            $(".user").focus().after("<br class='error'><span class='error btn btn-small btn-danger'>No se admiten Espacios en Blanco o Caracteres Extraños</span>");
+            $(".user").focus().after("<br class='error'><span class='error btn btn-small btn-danger'>No se admiten Espacios en Blanco o Caracteres Especiales</span>");
             return false;
         }
         else if ($(".pass").val() == "") {

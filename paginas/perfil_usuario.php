@@ -130,7 +130,7 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
 
                 <div class="row" style="margin-top: -60px;" >               
                     <div class="span10 well well-large" > 
-                        <div class="span6">      		
+                        <div class="span9">      		
 
                             <div class="widget stacked ">
                                 <div class="widget-header">
@@ -153,25 +153,26 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
 
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="perfil">
-                                                <form id="edit-perfil" class="form-horizontal">
+                                                <form id="edit-perfil" name="edit-perfil" class="form-horizontal">
+                                                     <input type="hidden" name="funcion" id="funcion" value="editarPerfilUsuario">
                                                     <fieldset>
                                                         <div class="control-group">											
                                                             <label class="control-label" for="nom_usuario_edit">Nombre de Usuario: </label>
                                                             <div class="controls">
-                                                                <input type="text" class="input-medium" id="nom_usuario_edit" value="">
+                                                                <input type="text" class="input-medium" id="nom_usuario_edit" value="" required="required" placeholder="Nombre de Usuario">
                                                             </div> 				
                                                         </div> 
                                                         <div class="control-group">											
                                                             <label class="control-label" for="nom_ape_usuario_edit">Nombre y Apellido: </label>
                                                             <div class="controls">
-                                                                <input type="text" class="input-medium" id="nom_ape_usuario_edit" value="">
+                                                                <input type="text" class="input-medium" id="nom_ape_usuario_edit" value="" required="required" placeholder="Nombre y Apellido">
                                                             </div> 			
                                                         </div> 
 
                                                         <div class="control-group">											
                                                             <label class="control-label" for="correo_usuario_edit">Correo Electr&oacute;nico: </label>
                                                             <div class="controls">
-                                                                <input type="text" class="input-large" id="correo_usuario_edit" value="">
+                                                                <input type="email" class="input-large" id="correo_usuario_edit" value="" required="required" placeholder="Correo Electronico">
                                                             </div> 		
                                                         </div> 
 
@@ -185,23 +186,23 @@ if (isset($_SESSION['Tipo_Usuario']) && isset($_SESSION['Nombre_Usuario'])) {
                                                             <div class="control-group">											
                                                                 <label class="control-label" for="clave_old">Contraseña Anterior: </label>
                                                                 <div class="controls">
-                                                                    <input type="password" class="input-medium" id="clave_old" value="">
+                                                                    <input type="password" disabled="disabled" class="input-medium" id="clave_old" value="" placeholder="Contraseña Anterior" required="required">
                                                                 </div>			
                                                             </div>
                                                             <div class="control-group">											
                                                                 <label class="control-label" for="clave_new">Nueva Contraseña: </label>
                                                                 <div class="controls">
-                                                                    <input type="password" class="input-medium" id="clave_new" value="">
+                                                                    <input type="password" disabled="disabled" class="input-medium" id="clave_new" value="" placeholder="Nueva Contraseña" required="required">
                                                                 </div> 				
                                                             </div> 
                                                             <div class="control-group">											
                                                                 <label class="control-label" for="confirm_clave_new">Confirmar Contraseña: </label>
                                                                 <div class="controls">
-                                                                    <input type="password" class="input-medium" id="confirm_clave_new" value="">
+                                                                    <input type="password" disabled="disabled" class="input-medium" id="confirm_clave_new" value="" placeholder="Confirmar Contraseña" required="required">
                                                                 </div> 				
                                                             </div> 
                                                         </div>
-                                                        <div class="form-actions">
+                                                        <div class="form-actions" style="background-color: white">
                                                             <button type="submit" class="boton btn btn-primary">Guardar</button> 
                                                             <button class="btn">Cancelar</button>
                                                         </div> 

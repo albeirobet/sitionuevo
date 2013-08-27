@@ -22,7 +22,7 @@ function loadScoresGenero(Genero) {
             genero: Genero
         },
         beforeSend: function() {
-            console.log('estoy entrando a la funcion loadScoresGenero: '+Genero);
+            activarObjetoAjax(1);
         },
         success: function(datos) {
             data = JSON.parse(datos);
@@ -43,7 +43,7 @@ function loadScoresGenero(Genero) {
             }
         },
         complete: function() {
-            console.log('acabe el acceso a la funcion loadScoresGenero: '+Genero);
+            activarObjetoAjax(0);
         },
         cache: false,
         error: function(data, errorThrown)

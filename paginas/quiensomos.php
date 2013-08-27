@@ -126,7 +126,7 @@ include '../funciones/evitarCache.php';
                 </div>
                 <div class="span4 well well-large">                   
                     <dl>
-                        <dt>Eyder Albeiro</dt>
+                        <dt>Eyder Albeiro Ascuntar Rosales</dt>
                         <dd>Desarrollador</dd>
                     </dl>
                     <img src="../img/social/albeiro_desarrollador.jpg" class="img-rounded">

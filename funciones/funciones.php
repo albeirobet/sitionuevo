@@ -176,8 +176,8 @@ function registroUsuarios() {
 function  getInformacionPerfilUsuario(){
     $username = $_POST['username'];
     if(!empty($username)){
-    $arreglo = getElementosEspecificos('tbl_users', 'user', $username, 'string');
-    $contador = 0;
+        $arreglo = getElementosEspecificos('tbl_users', 'user', $username, 'string');
+        $contador = 0;
         foreach ($arreglo as $row) {
             $arr[$contador] =
                     array('Nombres' => $row['nombres'],
@@ -189,6 +189,11 @@ function  getInformacionPerfilUsuario(){
         echo '' . json_encode($arr) . '';
     }
     echo '';
+}
+
+function editarPerfilUsuario(){
+   
+    echo $nom_usuario_edit = $_POST['nom_usuario_edit'];
 }
 
 function enviarCorreo($destinatario, $username, $password, $codigoverificacion, $tipoCorreo) {
@@ -216,8 +221,8 @@ function recuperarDatos() {
     $email = $_POST['email_recovery'];
     $arr[0] = array('estado' => '0');
     if($email){
-       $arreglo = recuperarDatosCuenta('tbl_users', $email);
-       if (!$arreglo == false) {
+        $arreglo = recuperarDatosCuenta('tbl_users', $email);
+        if (!$arreglo == false) {
             foreach ($arreglo as $fila) {
                 $usuario = $fila['user'];
                 $password = $fila['pass'];
@@ -280,19 +285,19 @@ function plantillaCorreoElectronico($username, $password, $codigoverificacion, $
 
         </style>';
     if($tipoCorreo==1){
-    $divBienvenidos = '<div class="page-header">
+        $divBienvenidos = '<div class="page-header">
                         <h3>Bienvenido a Partituras Musicales!</h3>
                         <h6 style="margin-top: -20px">Gracias por registrarte y ser parte de esta Comunidad.</h6>
                        </div>';
-    $mensajeBienvenida = 'Hemos construido este sitio para que music@s como usted, Profesionales &oacute; Aficionad@s puedan compartir y adquirir nuevos conocimientos a traves 
+        $mensajeBienvenida = 'Hemos construido este sitio para que music@s como usted, Profesionales &oacute; Aficionad@s puedan compartir y adquirir nuevos conocimientos a traves 
                           de la musica.';
-    
-    $parrafoDatosRegistro = '<p>
+
+        $parrafoDatosRegistro = '<p>
                              <strong>Sus datos de registro son:</strong><br>
                              Nombre de Usuario: <strong>' . $username . '</strong>  <br>
                              Contrase&ntilde;a:  <strong>' . $password . '</strong>  
                              </p> ';
-    $parrafoActivacionCuenta = '<p>
+        $parrafoActivacionCuenta = '<p>
                                 Antes de continuar <strong>Activa tu Cuenta</strong> haciendo clic en el siguiente link: <br>
                                 <a href="http://partiturasmusicales.vacau.com/funciones/confirmarCorreo.php?codigo=' . $codigoverificacion . '">Activar Cuenta</a> <br><br>
                                 <strong>&iquest;El link Activar Cuenta esta bloqueado?</strong><br>
@@ -301,21 +306,21 @@ function plantillaCorreoElectronico($username, $password, $codigoverificacion, $
                                 </p>';
     }
     if($tipoCorreo==2){
-       $divBienvenidos = '<div class="page-header">
+        $divBienvenidos = '<div class="page-header">
                         <h3>Bienvenido de vuelta a Partituras Musicales!</h3>
                         <h6 style="margin-top: -20px">Gracias por ser parte de esta Comunidad.</h6>
-                       </div>'; 
-       
-       $mensajeBienvenida = 'Hemos recibido una petici&oacute;n para recuperar los Datos con los cuales se ha registrado en <strong> Partituras Musicales </strong>.';
-       $parrafoDatosRegistro = '<p>
+                       </div>';
+
+        $mensajeBienvenida = 'Hemos recibido una petici&oacute;n para recuperar los Datos con los cuales se ha registrado en <strong> Partituras Musicales </strong>.';
+        $parrafoDatosRegistro = '<p>
                              <strong>Sus datos de registro son:</strong><br>
                              Nombre de Usuario: <strong>' . $username . '</strong>  <br>
                              Contrase&ntilde;a:  <strong>' . $password . '</strong>  
                              </p> ';
-       $parrafoActivacionCuenta = '';
+        $parrafoActivacionCuenta = '';
     }
-    
-    
+
+
     /*
      * Sección Armar el Mensaje de Correo Electronico
      */
@@ -357,7 +362,7 @@ function plantillaCorreoElectronico($username, $password, $codigoverificacion, $
 //                    Ingresa el siguiente link en la barra de direcciones de tu navegador <br>
 //                    <a href="http://partiturasmusicales.vacau.com/funciones/confirmarCorreo.php?codigo=' . $codigoverificacion . '">http://www.partiturasmusicales.site90.com/funciones/confirmarCorreo.php?codigo=' . $codigoverificacion . '</a> <br>
 //                </p>
-     $mensaje.='<p>
+    $mensaje.='<p>
                 Gracias por utilizar <strong>PartiturasMusicales.net</strong><br>
                 <strong>PD.</strong> No dude en ponerse en cont&aacute;cto con nosotros si tiene algun problema o sugerencia.
                 </p>
