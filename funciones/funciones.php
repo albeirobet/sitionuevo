@@ -212,9 +212,11 @@ function editarPerfilUsuario() {
                 $correoBd = $row['email'];
             }
             $editarUsername = 0;
+            $editarNombres =0;
             $editarCorreo = 0;
             $editarClave = 0;
-
+            
+          
             if ($username != $usernameBd) {
                 $resultadoUser = registroExisteColumna('tbl_users', 'user', $username);
                 if ($resultadoUser == 0) {
@@ -222,6 +224,10 @@ function editarPerfilUsuario() {
                 } else {
                     $error = '1';
                 }
+            }
+            
+            if ($nombres != $nombresBd) {
+                $editarNombres= 1;
             }
 
             if ($correo != $correoBd) {
@@ -253,7 +259,7 @@ function editarPerfilUsuario() {
             }
 
             if ($error == '0') {
-                $edicion = '1';
+                $edicion = '-2';
                 if ($editarUsername == 1) {
                     $resEditUsername = editarRegistroColumna('tbl_users', 'user', $username, 'id', $idUsuario);
                     if ($resEditUsername == 1) {
@@ -262,15 +268,22 @@ function editarPerfilUsuario() {
                         $_SESSION["Nombre_Usuario"] = $username;
                     }
                 }
+                if($editarNombres ==1){
+                   $resEditNombres = editarRegistroColumna('tbl_users', 'nombres', $nombres, 'id', $idUsuario); 
+                   if ($resEditNombres == 1 && $edicion == '-2') {
+                        $edicion = '0';
+                    }
+                }
+                
                 if ($editarCorreo == 1) {
                     $resEditCorreo = editarRegistroColumna('tbl_users', 'email', $correo, 'id', $idUsuario);
-                    if ($resEditCorreo == 1 && $edicion == '1') {
+                    if ($resEditCorreo == 1 && $edicion == '-2') {
                         $edicion = '0';
                     }
                 }
                 if ($editarClave == 1) {
                     $resEditClave = editarRegistroColumna('tbl_users', 'pass', $claveConfirmacion, 'id', $idUsuario);
-                    if ($resEditClave == 1 && $edicion == '1') {
+                    if ($resEditClave == 1 && $edicion == '-2') {
                         $edicion = '0';
                     }
                 }

@@ -10,7 +10,7 @@
 
 function crearConexion() {
     try {
-        $conn = new PDO('mysql:host=localhost;dbname=bd_partituras_musicales;charset=utf8', 'root', 'hds2013');
+        $conn = new PDO('mysql:host=localhost;dbname=bd_partituras_musicales;charset=utf8', 'root', 'albeiro');
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     } catch (PDOException $e) {
         echo "ERROR: " . $e->getMessage();

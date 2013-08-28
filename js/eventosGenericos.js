@@ -97,11 +97,7 @@ function mostrarMensajeSistema(idDiv, tipoMensaje, tituloMensaje, mensaje, cerra
     if(!cerrarMensaje){
        botonCerrarMensaje=''; 
     }
-    var titulo = '<h6>'+tituloMensaje+'</h6>';
+    var titulo = '<strong>'+tituloMensaje+'</strong><br>';
     $('#' + idDiv).addClass(claseMensaje).html(botonCerrarMensaje+titulo+mensaje).css('display', 'block');
-}
-
-function ocultarMensajeSistema() {
-
 }
 

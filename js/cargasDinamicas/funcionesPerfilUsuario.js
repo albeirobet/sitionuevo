@@ -165,7 +165,6 @@ function  editarPerfil() {
                 switch ($.trim(data))
                 {
                     case '0':
-                        console.log('El perfil se actualizo con exito');
                         $("#nombre_usuario").html($("#nom_usuario_edit").val());
                         mostrarMensajeSistema('msg_edicion_perfil', 'exito', 'Edici&oacute;n Exitosa', 'Tu perfil ha sido editado correctamente' , true);
                         break;
@@ -185,8 +184,7 @@ function  editarPerfil() {
                         mostrarMensajeSistema('msg_edicion_perfil', 'error', 'Error al editar Perfil', 'Se produjo un error al editar el perfil' , false);
                         break;
                     default:
-                       mostrarMensajeSistema('msg_edicion_perfil', 'informacion', 'No se edito Perfil', 'No se realizaron cambios en el perfil de usuario' , true); 
-                       console.log('No se realizaron cambios en el perfil de usuario');
+                       mostrarMensajeSistema('msg_edicion_perfil', 'informacion', 'No se edit&oacute; el Perfil', 'No se realizaron cambios en el perfil de usuario' , true); 
                 }
             },
             complete: function() {
